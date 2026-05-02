@@ -44,6 +44,50 @@
             font-size: 14px;
         }
 
+        .config-bar {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .config-bar label {
+            color: var(--text-dim);
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .config-bar input {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 14px;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .config-bar button {
+            background: var(--cyan);
+            color: var(--bg);
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .config-bar button:hover {
+            opacity: 0.9;
+        }
+
         .stats-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -91,7 +135,8 @@
             border-collapse: collapse;
         }
 
-        th, td {
+        th,
+        td {
             padding: 10px 12px;
             text-align: left;
             border-bottom: 1px solid var(--border);
@@ -104,9 +149,17 @@
             letter-spacing: 1px;
         }
 
-        .rank-1 td:first-child { color: var(--gold); }
-        .rank-2 td:first-child { color: var(--silver); }
-        .rank-3 td:first-child { color: var(--bronze); }
+        .rank-1 td:first-child {
+            color: var(--gold);
+        }
+
+        .rank-2 td:first-child {
+            color: var(--silver);
+        }
+
+        .rank-3 td:first-child {
+            color: var(--bronze);
+        }
 
         .level-badge {
             display: inline-block;
@@ -118,68 +171,56 @@
             font-size: 13px;
         }
 
-        input, button, select {
+        code {
             background: var(--bg);
-            color: var(--text);
-            border: 1px solid var(--border);
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-size: 14px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
         }
 
-        button {
-            background: var(--cyan);
-            color: var(--bg);
-            font-weight: bold;
-            cursor: pointer;
+        button.link-btn {
+            background: none;
+            color: var(--cyan);
             border: none;
-        }
-
-        button:hover {
-            opacity: 0.9;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            color: var(--text-dim);
-            margin-bottom: 5px;
+            cursor: pointer;
             font-size: 13px;
+            text-decoration: underline;
+            padding: 0;
         }
 
-        .form-row {
-            display: flex;
-            gap: 10px;
-            align-items: end;
-        }
-
-        .success {
-            color: #3fb950;
-            margin-left: 10px;
-            font-size: 13px;
+        button.link-btn:hover {
+            opacity: 0.8;
         }
 
         .loading {
             color: var(--text-dim);
             font-style: italic;
+            padding: 15px 0;
         }
 
         @media (max-width: 600px) {
             .stats-row {
                 grid-template-columns: 1fr 1fr;
             }
-            .form-row {
+
+            .config-bar {
                 flex-direction: column;
+                align-items: stretch;
             }
         }
     </style>
 </head>
 <body>
     <h1>🔮 Arcane Bot</h1>
-    <p class="subtitle">Discord Bot 控制面板 · <span id="connection-status">连接中...</span></p>
+    <p class="subtitle">Discord Bot 控制面板 · <span id="connection-status">未配置 API</span></p>
+
+    <!-- API 配置栏 -->
+    <div class="config-bar">
+        <label>🔗 API 地址:</label>
+        <input type="text" id="api-url" placeholder="https://xxx.trycloudflare.com">
+        <button onclick="connectAPI()">连接</button>
+        <span id="config-status" style="font-size: 13px;"></span>
+    </div>
 
     <!-- 统计卡片 -->
     <div class="stats-row">
@@ -197,31 +238,6 @@
         </div>
     </div>
 
-    <!-- 排行榜 -->
-    <div class="section">
-        <h2>🏆 排行榜</h2>
-        <div class="form-row">
-            <div class="form-group">
-                <label>服务器 ID</label>
-                <input type="text" id="guild-id" placeholder="输入服务器 ID" style="width: 250px;">
-            </div>
-            <button onclick="loadLeaderboard()">查询</button>
-        </div>
-        <table id="leaderboard-table" style="margin-top: 15px; display: none;">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>用户 ID</th>
-                    <th>等级</th>
-                    <th>XP</th>
-                    <th>语音 XP</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <p id="lb-loading" class="loading" style="margin-top: 10px; display: none;">加载中...</p>
-    </div>
-
     <!-- 服务器列表 -->
     <div class="section">
         <h2>📋 服务器列表</h2>
@@ -236,56 +252,121 @@
             </thead>
             <tbody></tbody>
         </table>
-        <p id="guilds-loading" class="loading">加载中...</p>
+        <p id="guilds-loading" class="loading">等待连接...</p>
+    </div>
+
+    <!-- 排行榜 -->
+    <div class="section">
+        <h2>🏆 排行榜</h2>
+        <p style="color: var(--text-dim); margin-bottom: 10px;">点击服务器列表中的"查看"按钮，或手动输入服务器 ID</p>
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <input type="text" id="guild-id" placeholder="输入服务器 ID" style="flex: 1; max-width: 300px;">
+            <button onclick="loadLeaderboard()">查询</button>
+        </div>
+        <table id="leaderboard-table" style="display: none;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>用户 ID</th>
+                    <th>等级</th>
+                    <th>XP</th>
+                    <th>语音 XP</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <p id="lb-loading" class="loading" style="display: none;">加载中...</p>
     </div>
 
     <script>
-        const API_BASE = "https://matrix-eating-coleman-wal.trycloudflare.com";
+        let API_BASE = "";
 
-        // 健康检查
-        fetch(API_BASE + "/api/health")
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById("connection-status").textContent = "✅ 已连接";
-                    document.getElementById("connection-status").style.color = "#3fb950";
-                }
-            })
-            .catch(() => {
-                document.getElementById("connection-status").textContent = "❌ 连接失败";
-                document.getElementById("connection-status").style.color = "#f85149";
-            });
+        // 尝试从 localStorage 恢复上次的 API 地址
+        const savedAPI = localStorage.getItem("arcane_bot_api");
+        if (savedAPI) {
+            document.getElementById("api-url").value = savedAPI;
+            API_BASE = savedAPI;
+            connectAPI(true);
+        }
 
-        // 加载统计
-        fetch(API_BASE + "/api/stats")
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById("total-users").textContent = data.data.total_users;
-                    document.getElementById("total-guilds").textContent = data.data.total_guilds;
-                    document.getElementById("max-level").textContent = data.data.max_level;
-                }
-            });
+        function connectAPI(silent = false) {
+            const url = document.getElementById("api-url").value.trim();
+            if (!url) {
+                if (!silent) alert("请输入 API 地址");
+                return;
+            }
 
-        // 加载服务器列表
-        fetch(API_BASE + "/api/guilds")
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById("guilds-loading").style.display = "none";
-                if (data.success) {
-                    const tbody = document.querySelector("#guilds-table tbody");
-                    data.data.forEach(g => {
-                        const tr = document.createElement("tr");
-                        tr.innerHTML = `
-                            <td><code>${g.guild_id}</code></td>
-                            <td>${g.user_count}</td>
-                            <td><span class="level-badge">Lv.${g.max_level}</span></td>
-                            <td><button onclick="viewGuild('${g.guild_id}')">查看排行</button></td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
-                }
-            });
+            // 去掉末尾斜杠
+            API_BASE = url.replace(/\/$/, "");
+            localStorage.setItem("arcane_bot_api", API_BASE);
+
+            const statusEl = document.getElementById("config-status");
+            statusEl.textContent = "连接中...";
+            statusEl.style.color = "var(--text-dim)";
+
+            fetch(API_BASE + "/api/health")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById("connection-status").textContent = "✅ 已连接";
+                        document.getElementById("connection-status").style.color = "#3fb950";
+                        statusEl.textContent = "✅";
+                        statusEl.style.color = "#3fb950";
+                        loadAll();
+                    } else {
+                        throw new Error("API 返回失败");
+                    }
+                })
+                .catch(() => {
+                    document.getElementById("connection-status").textContent = "❌ 连接失败";
+                    document.getElementById("connection-status").style.color = "#f85149";
+                    statusEl.textContent = "❌";
+                    statusEl.style.color = "#f85149";
+                });
+        }
+
+        function loadAll() {
+            loadStats();
+            loadGuilds();
+        }
+
+        function loadStats() {
+            fetch(API_BASE + "/api/stats")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById("total-users").textContent = data.data.total_users;
+                        document.getElementById("total-guilds").textContent = data.data.total_guilds;
+                        document.getElementById("max-level").textContent = data.data.max_level;
+                    }
+                });
+        }
+
+        function loadGuilds() {
+            document.getElementById("guilds-loading").style.display = "block";
+            fetch(API_BASE + "/api/guilds")
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("guilds-loading").style.display = "none";
+                    if (data.success) {
+                        const tbody = document.querySelector("#guilds-table tbody");
+                        tbody.innerHTML = "";
+                        data.data.forEach(g => {
+                            const tr = document.createElement("tr");
+                            tr.innerHTML = `
+                                <td><code>${g.guild_id}</code></td>
+                                <td>${g.user_count}</td>
+                                <td><span class="level-badge">Lv.${g.max_level}</span></td>
+                                <td><button class="link-btn" onclick="viewGuild('${g.guild_id}')">查看排行 →</button></td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    }
+                })
+                .catch(() => {
+                    document.getElementById("guilds-loading").style.display = "none";
+                });
+        }
 
         function viewGuild(guildId) {
             document.getElementById("guild-id").value = guildId;
