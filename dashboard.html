@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcane Bot 控制面板</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --border: #30363d;
+            --cyan: #41b7b7;
+            --pink: #c94d8c;
+            --text: #e6edf3;
+            --text-dim: #8b949e;
+            --gold: #d2991d;
+            --silver: #8b949e;
+            --bronze: #cd7f32;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: var(--cyan);
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: var(--text-dim);
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .card h3 {
+            color: var(--text-dim);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .card .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--cyan);
+        }
+
+        .section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            color: var(--cyan);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            color: var(--text-dim);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .rank-1 td:first-child { color: var(--gold); }
+        .rank-2 td:first-child { color: var(--silver); }
+        .rank-3 td:first-child { color: var(--bronze); }
+
+        .level-badge {
+            display: inline-block;
+            background: var(--cyan);
+            color: var(--bg);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        input, button, select {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        button {
+            background: var(--cyan);
+            color: var(--bg);
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-dim);
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .success {
+            color: #3fb950;
+            margin-left: 10px;
+            font-size: 13px;
+        }
+
+        .loading {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+            .form-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🔮 Arcane Bot</h1>
+    <p class="subtitle">Discord Bot 控制面板 · <span id="connection-status">连接中...</span></p>
+
+    <!-- 统计卡片 -->
+    <div class="stats-row">
+        <div class="card">
+            <h3>📊 总用户</h3>
+            <div class="value" id="total-users">-</div>
+        </div>
+        <div class="card">
+            <h3>🌐 服务器数</h3>
+            <div class="value" id="total-guilds">-</div>
+        </div>
+        <div class="card">
+            <h3>🏆 最高等级</h3>
+            <div class="value" id="max-level">-</div>
+        </div>
+    </div>
+
+    <!-- 排行榜 -->
+    <div class="section">
+        <h2>🏆 排行榜</h2>
+        <div class="form-row">
+            <div class="form-group">
+                <label>服务器 ID</label>
+                <input type="text" id="guild-id" placeholder="输入服务器 ID" style="width: 250px;">
+            </div>
+            <button onclick="loadLeaderboard()">查询</button>
+        </div>
+        <table id="leaderboard-table" style="margin-top: 15px; display: none;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>用户 ID</th>
+                    <th>等级</th>
+                    <th>XP</th>
+                    <th>语音 XP</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <p id="lb-loading" class="loading" style="margin-top: 10px; display: none;">加载中...</p>
+    </div>
+
+    <!-- 服务器列表 -->
+    <div class="section">
+        <h2>📋 服务器列表</h2>
+        <table id="guilds-table">
+            <thead>
+                <tr>
+                    <th>服务器 ID</th>
+                    <th>用户数</th>
+                    <th>最高等级</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <p id="guilds-loading" class="loading">加载中...</p>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+
+        // 健康检查
+        fetch(API_BASE + "/api/health")
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById("connection-status").textContent = "✅ 已连接";
+                    document.getElementById("connection-status").style.color = "#3fb950";
+                }
+            })
+            .catch(() => {
+                document.getElementById("connection-status").textContent = "❌ 连接失败";
+                document.getElementById("connection-status").style.color = "#f85149";
+            });
+
+        // 加载统计
+        fetch(API_BASE + "/api/stats")
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById("total-users").textContent = data.data.total_users;
+                    document.getElementById("total-guilds").textContent = data.data.total_guilds;
+                    document.getElementById("max-level").textContent = data.data.max_level;
+                }
+            });
+
+        // 加载服务器列表
+        fetch(API_BASE + "/api/guilds")
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("guilds-loading").style.display = "none";
+                if (data.success) {
+                    const tbody = document.querySelector("#guilds-table tbody");
+                    data.data.forEach(g => {
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td><code>${g.guild_id}</code></td>
+                            <td>${g.user_count}</td>
+                            <td><span class="level-badge">Lv.${g.max_level}</span></td>
+                            <td><button onclick="viewGuild('${g.guild_id}')">查看排行</button></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            });
+
+        function viewGuild(guildId) {
+            document.getElementById("guild-id").value = guildId;
+            loadLeaderboard();
+        }
+
+        function loadLeaderboard() {
+            const guildId = document.getElementById("guild-id").value.trim();
+            if (!guildId) {
+                alert("请输入服务器 ID");
+                return;
+            }
+
+            const table = document.getElementById("leaderboard-table");
+            const loading = document.getElementById("lb-loading");
+            table.style.display = "none";
+            loading.style.display = "block";
+
+            fetch(API_BASE + "/api/leaderboard/" + guildId)
+                .then(res => res.json())
+                .then(data => {
+                    loading.style.display = "none";
+                    table.style.display = "table";
+                    const tbody = table.querySelector("tbody");
+                    tbody.innerHTML = "";
+
+                    if (data.success && data.data.length > 0) {
+                        data.data.forEach(row => {
+                            const tr = document.createElement("tr");
+                            if (row.rank <= 3) tr.classList.add("rank-" + row.rank);
+                            tr.innerHTML = `
+                                <td>${row.rank <= 3 ? ["🥇","🥈","🥉"][row.rank-1] : row.rank}</td>
+                                <td><code>${row.user_id}</code></td>
+                                <td><span class="level-badge">Lv.${row.level}</span></td>
+                                <td>${row.xp.toLocaleString()}</td>
+                                <td>${row.voice_xp.toLocaleString()}</td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-dim);">暂无数据</td></tr>';
+                    }
+                })
+                .catch(() => {
+                    loading.style.display = "none";
+                    table.style.display = "table";
+                    const tbody = table.querySelector("tbody");
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#f85149;">加载失败</td></tr>';
+                });
+        }
+    </script>
+</body>
+</html>
