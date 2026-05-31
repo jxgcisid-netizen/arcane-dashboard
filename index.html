@@ -147,7 +147,6 @@
         <div class="tab-content" id="tab-settings">
             <div class="content-grid single">
 
-                <!-- 服务器设置 -->
                 <div class="panel full">
                     <div class="panel-header">⚙️ 服务器设置</div>
                     <div class="panel-body" id="settings-panel">
@@ -155,7 +154,6 @@
                     </div>
                 </div>
 
-                <!-- 欢迎消息 -->
                 <div class="panel full">
                     <div class="panel-header">🔔 欢迎消息模板</div>
                     <div class="panel-body" id="welcome-panel">
@@ -163,7 +161,6 @@
                     </div>
                 </div>
 
-                <!-- 图表统计 -->
                 <div class="panel full">
                     <div class="panel-header">📈 服务器统计</div>
                     <div class="panel-body" id="chart-panel">
@@ -171,7 +168,6 @@
                     </div>
                 </div>
 
-                <!-- 成员管理 -->
                 <div class="panel full">
                     <div class="panel-header">🛡️ 成员管理</div>
                     <div class="panel-body" id="mod-panel">
@@ -179,7 +175,6 @@
                     </div>
                 </div>
 
-                <!-- 危险区域 -->
                 <div class="panel full">
                     <div class="panel-header">⚠️ 危险区域</div>
                     <div class="panel-body">
@@ -213,8 +208,8 @@
     const API  = "https://web--arcane--d9n9n2zg4zh5.code.run";
     const SKEY = "fbxbot_auth_token", RKEY = "fbxbot_remember";
 
-    let guildList    = [];   // 所有服务器
-    let activeGuild  = null; // 当前选中的服务器 { guild_id, guild_name }
+    let guildList    = [];
+    let activeGuild  = null;
     let botOnline    = true;
 
     async function api(url, opts = {}) {
@@ -259,8 +254,13 @@
             const r = localStorage.getItem(RKEY), t = localStorage.getItem(SKEY);
             if (r === "true" && t) {
                 const ok = await this.verify(t);
-                if (ok) { document.getElementById("lockscreen").classList.add("hidden"); App.init(); return; }
-                else localStorage.removeItem(SKEY);
+                if (ok) {
+                    document.getElementById("lockscreen").classList.add("hidden");
+                    App.init();
+                    return;
+                } else {
+                    localStorage.removeItem(SKEY);
+                }
             }
             document.getElementById("lockscreen").classList.remove("hidden");
             document.getElementById("password-input").focus();
@@ -355,6 +355,10 @@
     // 选服务器
     // ====================================================================
     function showGuildPicker() {
+        if (!guildList.length) {
+            toast("没有可用的服务器", "error");
+            return;
+        }
         const list = document.getElementById("guild-picker-list");
         list.innerHTML = guildList.map(g => `
             <div onclick="selectGuild('${g.guild_id}')" style="padding:12px;cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.15s;"
@@ -370,19 +374,22 @@
         activeGuild = guildList.find(g => g.guild_id === gid);
         document.getElementById("guild-picker").style.display = "none";
         document.getElementById("guild-id-input").value = gid;
-        // 更新所有面板
-        refreshAllPanels();
-        toast("✅ 已选择: " + (activeGuild?.guild_name || gid), "success");
-    }
 
-    function refreshAllPanels() {
-        if (!activeGuild) return;
+        // 高亮仪表盘
+        document.querySelectorAll("#guilds-panel tbody tr").forEach(r => r.classList.remove("active"));
+        document.querySelectorAll("#guilds-panel tbody tr").forEach(r => {
+            if (r.textContent.includes(gid)) r.classList.add("active");
+        });
+
+        // 刷新所有面板
         Dashboard.loadLeaderboard();
         Messenger.onGuildReady();
         Settings.load();
         Welcome.load();
         Chart.load();
         Moderation.load();
+
+        toast("✅ 已选择: " + (activeGuild?.guild_name || gid), "success");
     }
 
     // ====================================================================
@@ -390,13 +397,26 @@
     // ====================================================================
     const UI = {
         switchTab(name) {
+            if (!activeGuild) {
+                showGuildPicker();
+                toast("请先选择服务器", "info");
+                return;
+            }
             document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
             document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
             document.querySelector(`.tab[onclick="UI.switchTab('${name}')"]`).classList.add("active");
-            document.getElementById("tab-"+name).classList.add("active");
-            if (!activeGuild && name !== "dashboard") {
-                toast("请先在仪表盘选择服务器", "info");
-                showGuildPicker();
+            document.getElementById("tab-" + name).classList.add("active");
+
+            // 切到消息发送，如果成员还没加载，立即加载
+            if (name === "messenger" && !Messenger.members.length && !Messenger.roles.length) {
+                Messenger.onGuildReady();
+            }
+            // 切到设置，刷新
+            if (name === "settings") {
+                Settings.load();
+                Welcome.load();
+                Chart.load();
+                Moderation.load();
             }
         }
     };
@@ -410,9 +430,10 @@
             try { const d = await (await api(API+"/api/health")).json(); botOnline = d.success && d.bot_connected; } catch(e) { botOnline=false; }
             BotControl.updateUI();
             await this.loadAll();
-            // 加载完弹出选服务器
             if (guildList.length > 0) {
-                setTimeout(() => showGuildPicker(), 500);
+                showGuildPicker();
+            } else {
+                toast("没有可用的服务器，请确认 Bot 已加入服务器", "error");
             }
         },
         async loadAll() { await Promise.all([this.loadStats(), this.loadGuilds()]); },
@@ -427,7 +448,7 @@
                     guildList = d.data;
                     document.getElementById("guild-count").textContent = d.data.length;
                     panel.innerHTML = `<table><thead><tr><th>服务器</th><th>用户</th><th>最高等级</th></tr></thead><tbody>
-                        ${d.data.map(g => `<tr onclick="selectGuild('${g.guild_id}')" class=""><td><div class="guild-name">${esc(g.guild_name||'未知')}</div><div class="guild-id">${g.guild_id}</div></td><td>${g.user_count.toLocaleString()}</td><td><span class="level-tag">Lv ${g.max_level}</span></td></tr>`).join("")}</tbody></table>`;
+                        ${d.data.map(g => `<tr onclick="selectGuild('${g.guild_id}')"><td><div class="guild-name">${esc(g.guild_name||'未知')}</div><div class="guild-id">${g.guild_id}</div></td><td>${g.user_count.toLocaleString()}</td><td><span class="level-tag">Lv ${g.max_level}</span></td></tr>`).join("")}</tbody></table>`;
                 } else panel.innerHTML = '<div class="empty-state"><div class="icon">📭</div>暂无数据</div>';
             } catch(e) { panel.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div>加载失败</div>'; }
         }
@@ -459,7 +480,6 @@
     // ====================================================================
     const Messenger = {
         members: [], roles: [], mentionIndex: -1, files: [],
-        channels: [],
 
         async onGuildReady() {
             if (!activeGuild) return;
@@ -481,14 +501,17 @@
             // 成员 + 身份组
             try {
                 const d = await (await api(API+"/api/guilds/"+gid+"/members")).json();
-                if (d.success) { this.members = d.data.members || []; this.roles = d.data.roles || []; }
+                if (d.success) {
+                    this.members = d.data.members || [];
+                    this.roles   = d.data.roles   || [];
+                    console.log("✅ 加载成员:", this.members.length, "身份组:", this.roles.length);
+                }
             } catch(e) { this.members=[]; this.roles=[]; }
 
             // 频道
             try {
                 const d = await (await api(API+"/api/guilds/"+gid+"/channels")).json();
                 if (d.success) {
-                    this.channels = d.data;
                     cs.innerHTML = '<option value="">-- 选择频道 --</option>';
                     d.data.forEach(ch => { const o=document.createElement("option"); o.value=ch.id; o.textContent=(ch.category?"["+ch.category+"] ":"")+"#"+ch.name; cs.appendChild(o); });
                 } else cs.innerHTML = '<option value="">获取失败</option>';
@@ -499,24 +522,46 @@
             const ta = document.getElementById("message-content"), val = ta.value, cp = ta.selectionStart;
             const before = val.substring(0, cp), match = before.match(/@(\S*)$/);
             const sug = document.getElementById("mention-suggestions");
-            if (!match || (!this.members.length && !this.roles.length)) { sug.classList.remove("show"); this.mentionIndex=-1; this.updateCharCount(); return; }
+
+            if (!match) {
+                sug.classList.remove("show");
+                this.mentionIndex = -1;
+                this.updateCharCount();
+                return;
+            }
+
             const q = match[1].toLowerCase();
             let items = [];
-            if (q===""||"everyone".startsWith(q)) items.push({t:"everyone",id:"@everyone",name:"@everyone",color:"#f0a500"});
-            if (q===""||"here".startsWith(q)) items.push({t:"here",id:"@here",name:"@here",color:"#f0a500"});
-            this.roles.filter(r=>r.name.toLowerCase().includes(q)).slice(0,5).forEach(r=>items.push({t:"role",id:r.id,name:"@"+r.name,color:r.color}));
-            this.members.filter(m=>m.display_name.toLowerCase().includes(q)||m.username.toLowerCase().includes(q)).slice(0,8).forEach(m=>items.push({t:"member",id:m.id,name:m.display_name,avatar:m.avatar_url,username:m.username}));
-            items=items.slice(0,15);
-            if (items.length>0) {
-                this.mentionIndex=-1;
+
+            // @everyone / @here
+            if (q === "" || "everyone".startsWith(q)) items.push({t:"everyone", id:"@everyone", name:"@everyone", color:"#f0a500"});
+            if (q === "" || "here".startsWith(q))     items.push({t:"here",     id:"@here",     name:"@here",     color:"#f0a500"});
+
+            // 身份组
+            this.roles.filter(r => r.name.toLowerCase().includes(q)).slice(0,5).forEach(r => {
+                items.push({t:"role", id:r.id, name:"@"+r.name, color:r.color});
+            });
+
+            // 成员
+            this.members.filter(m => m.display_name.toLowerCase().includes(q) || m.username.toLowerCase().includes(q)).slice(0,8).forEach(m => {
+                items.push({t:"member", id:m.id, name:m.display_name, avatar:m.avatar_url, username:m.username});
+            });
+
+            items = items.slice(0,15);
+
+            if (items.length > 0) {
+                this.mentionIndex = -1;
                 sug.innerHTML = items.map((it,i) => {
                     let icon = it.avatar ? `<img src="${it.avatar}">` : (it.color ? `<div class="role-icon" style="background:${it.color};">@</div>` : `<div class="role-icon" style="background:var(--border);">@</div>`);
                     return `<div class="mention-item" data-idx="${i}" data-id="${it.id}" data-t="${it.t}" onmousedown="Messenger.insertMention(this)">${icon}<span>${esc(it.name)}</span>${it.username?`<span style="color:var(--text-muted);font-size:10px;">@${esc(it.username)}</span>`:""}</div>`;
                 }).join("");
                 sug.classList.add("show");
-            } else { sug.classList.remove("show"); }
+            } else {
+                sug.classList.remove("show");
+            }
             this.updateCharCount();
         },
+
         onKeydown(e) {
             const sug = document.getElementById("mention-suggestions");
             if (!sug.classList.contains("show")) return;
@@ -526,7 +571,9 @@
             else if(e.key==="Enter"&&this.mentionIndex>=0){e.preventDefault();this.insertMention(items[this.mentionIndex]);}
             else if(e.key==="Escape"){sug.classList.remove("show");this.mentionIndex=-1;}
         },
+
         _hl(items){items.forEach((it,i)=>it.style.background=i===this.mentionIndex?"var(--cyan-glow)":"");},
+
         insertMention(el){
             const ta=document.getElementById("message-content"),val=ta.value,cp=ta.selectionStart,before=val.substring(0,cp),after=val.substring(cp);
             const id=el.dataset.id,t=el.dataset.t;
@@ -534,17 +581,21 @@
             ta.value=before.replace(/@\S*$/,"")+mention+" "+after;
             document.getElementById("mention-suggestions").classList.remove("show");this.mentionIndex=-1;ta.focus();this.updateCharCount();
         },
+
         updateCharCount(){const l=document.getElementById("message-content").value.length,el=document.getElementById("char-count");el.textContent=l+" / 2000";el.className="char-count"+(l>1800?" warn":"")+(l>1950?" danger":"");},
         toggleEmbed(){document.getElementById("embed-options").style.display=document.getElementById("embed-enabled").checked?"grid":"none";},
+
         handleFiles(fl){for(const f of fl){if(f.size>8*1024*1024){toast(f.name+" 超过8MB","error");continue;}this.files.push(f);}this._rf();},
         _rf(){document.getElementById("file-list").innerHTML=this.files.map((f,i)=>`<div class="file-tag">📄 ${esc(f.name)} (${(f.size/1024).toFixed(1)}KB) <span class="remove" onclick="Messenger.removeFile(${i})">×</span></div>`).join("");},
         removeFile(i){this.files.splice(i,1);this._rf();},
+
         preview(){
             const c=document.getElementById("message-content").value;document.getElementById("message-preview").classList.add("show");
             document.getElementById("preview-content").textContent=c||"(空消息)";
             const pe=document.getElementById("preview-embed");
             if(document.getElementById("embed-enabled").checked){pe.style.display="block";pe.style.borderLeftColor=document.getElementById("embed-color").value||"#00b4d8";document.getElementById("preview-embed-title").textContent=document.getElementById("embed-title").value||"(无标题)";document.getElementById("preview-embed-desc").textContent=document.getElementById("embed-description").value||"(无描述)";document.getElementById("preview-embed-footer").textContent=document.getElementById("embed-footer").value||"";}else pe.style.display="none";
         },
+
         async send(){
             const cid=document.getElementById("msg-channel-select").value,content=document.getElementById("message-content").value.trim();
             if(!cid){toast("请选择频道","error");return;}if(!content&&!this.files.length){toast("请输入内容或上传文件","error");return;}
@@ -662,9 +713,10 @@
             const gid = activeGuild.guild_id;
             try {
                 const d = await (await api(API+"/api/guilds/"+gid+"/members")).json();
-                console.log("成员数据:", d);
+                console.log("成员管理数据:", d);
                 if (d.success) {
-                    this.members = d.data.members || [];
+                    const list = d.data.members || d.data || [];
+                    this.members = Array.isArray(list) ? list : [];
                     document.getElementById("mod-panel").innerHTML = `
                         <div class="toolbar"><input type="text" id="mod-search" placeholder="搜索成员..." oninput="Moderation.filter()"></div>
                         <div style="max-height:350px;overflow-y:auto;">
@@ -676,8 +728,12 @@
                                 <td><button class="btn btn-danger btn-sm" onclick="Moderation.kick('${m.id}','${esc(m.display_name)}')">踢出</button> <button class="btn btn-danger btn-sm" onclick="Moderation.ban('${m.id}','${esc(m.display_name)}')">封禁</button></td>
                             </tr>`).join("")}</tbody></table>
                         </div>`;
+                } else {
+                    document.getElementById("mod-panel").innerHTML = '<div class="empty-state">❌ '+(d.error||"获取失败")+'</div>';
                 }
-            } catch(e) {}
+            } catch(e) {
+                document.getElementById("mod-panel").innerHTML = '<div class="empty-state">⚠️ 加载失败</div>';
+            }
         },
         filter() {
             const q = (document.getElementById("mod-search")?.value||"").toLowerCase();
