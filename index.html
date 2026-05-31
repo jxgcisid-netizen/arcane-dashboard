@@ -8,7 +8,9 @@
 </head>
 <body>
 
-    <!-- 锁屏 -->
+    <!-- ================================================================ -->
+    <!-- 锁屏                                                              -->
+    <!-- ================================================================ -->
     <div class="lockscreen" id="lockscreen">
         <div class="lock-box">
             <div class="lock-icon">🔐</div>
@@ -26,7 +28,9 @@
         </div>
     </div>
 
-    <!-- 导航栏 -->
+    <!-- ================================================================ -->
+    <!-- 导航栏                                                            -->
+    <!-- ================================================================ -->
     <nav class="navbar">
         <div class="navbar-brand">FBX<span>Bot</span></div>
         <div class="navbar-actions">
@@ -39,7 +43,9 @@
         </div>
     </nav>
 
-    <!-- 主内容 -->
+    <!-- ================================================================ -->
+    <!-- 主内容                                                            -->
+    <!-- ================================================================ -->
     <div class="container" id="main-content">
         <div class="tabs">
             <button class="tab active" onclick="UI.switchTab('dashboard')">📊 仪表盘</button>
@@ -47,7 +53,7 @@
             <button class="tab" onclick="UI.switchTab('settings')">⚙️ 设置</button>
         </div>
 
-        <!-- 仪表盘 -->
+        <!-- ==================== 仪表盘 ==================== -->
         <div class="tab-content active" id="tab-dashboard">
             <div class="stats-grid">
                 <div class="stat-card"><div class="stat-label">📊 总用户</div><div class="stat-value" id="total-users">--</div></div>
@@ -75,7 +81,7 @@
             </div>
         </div>
 
-        <!-- 消息发送 -->
+        <!-- ==================== 消息发送 ==================== -->
         <div class="tab-content" id="tab-messenger">
             <div class="content-grid single">
                 <div class="panel full">
@@ -137,38 +143,27 @@
             </div>
         </div>
 
-        <!-- 设置 -->
+        <!-- ==================== 设置 ==================== -->
         <div class="tab-content" id="tab-settings">
             <div class="content-grid single">
 
+                <!-- 服务器设置 -->
                 <div class="panel full">
                     <div class="panel-header">⚙️ 服务器设置</div>
                     <div class="panel-body" id="settings-panel">
-                        <div class="empty-state"><div class="icon">🔒</div>请先在顶部选择服务器</div>
+                        <div class="empty-state"><div class="icon">🔒</div>请先在仪表盘选择服务器</div>
                     </div>
                 </div>
 
-                <div class="panel full">
-                    <div class="panel-header">🔔 欢迎消息模板</div>
-                    <div class="panel-body" id="welcome-panel">
-                        <div class="empty-state"><div class="icon">🔒</div>请先在顶部选择服务器</div>
-                    </div>
-                </div>
-
-                <div class="panel full">
-                    <div class="panel-header">📈 服务器统计</div>
-                    <div class="panel-body" id="chart-panel">
-                        <div class="empty-state"><div class="icon">📈</div>请先在顶部选择服务器</div>
-                    </div>
-                </div>
-
+                <!-- 成员管理 -->
                 <div class="panel full">
                     <div class="panel-header">🛡️ 成员管理</div>
                     <div class="panel-body" id="mod-panel">
-                        <div class="empty-state"><div class="icon">🛡️</div>请先在顶部选择服务器</div>
+                        <div class="empty-state"><div class="icon">🛡️</div>请先在仪表盘选择服务器</div>
                     </div>
                 </div>
 
+                <!-- 危险区域 -->
                 <div class="panel full">
                     <div class="panel-header">⚠️ 危险区域</div>
                     <div class="panel-body">
@@ -180,15 +175,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- 选服务器弹窗 -->
-    <div class="lockscreen" id="guild-picker" style="display:none;">
-        <div class="lock-box" style="padding:36px 32px;text-align:left;">
-            <div style="font-size:18px;font-weight:700;margin-bottom:6px;">🌐 选择服务器</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-bottom:20px;">请选择要管理的 Discord 服务器</div>
-            <div id="guild-picker-list" style="max-height:300px;overflow-y:auto;"></div>
         </div>
     </div>
 
@@ -242,19 +228,16 @@
     }
 
     // ====================================================================
-    // 认证 — 锁屏保持显示直到验证完成，不闪
+    // 认证
     // ====================================================================
     const Auth = {
         async init() {
-            // 先显示锁屏
             document.getElementById("lockscreen").classList.remove("hidden");
             document.getElementById("password-input").focus();
 
-            // 检查记住我
             const r = localStorage.getItem(RKEY);
             const t = localStorage.getItem(SKEY);
             if (r === "true" && t) {
-                // 显示"自动登录中..."
                 document.getElementById("password-input").disabled = true;
                 document.getElementById("password-input").placeholder = "自动登录中...";
                 document.getElementById("lock-btn").disabled = true;
@@ -262,12 +245,10 @@
 
                 const ok = await this.verify(t);
                 if (ok) {
-                    // 成功，平滑隐藏锁屏
                     document.getElementById("lockscreen").classList.add("hidden");
                     App.init();
                     return;
                 }
-                // 失败，恢复输入
                 localStorage.removeItem(SKEY);
                 document.getElementById("password-input").disabled = false;
                 document.getElementById("password-input").placeholder = "••••••";
@@ -380,65 +361,14 @@
     };
 
     // ====================================================================
-    // 选服务器
-    // ====================================================================
-    function showGuildPicker() {
-        if (!guildList.length) {
-            toast("没有可用的服务器", "error");
-            return;
-        }
-        const list = document.getElementById("guild-picker-list");
-        list.innerHTML = guildList.map(g => `
-            <div onclick="selectGuild('${g.guild_id}')" style="padding:12px;cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.15s;"
-                 onmouseover="this.style.background='var(--cyan-glow)'" onmouseout="this.style.background=''">
-                <div style="font-weight:600;">${esc(g.guild_name||'未知')}</div>
-                <div style="font-size:11px;color:var(--text-muted);">${g.guild_id} · ${g.user_count} 用户</div>
-            </div>
-        `).join("");
-        document.getElementById("guild-picker").style.display = "flex";
-    }
-
-    function selectGuild(gid) {
-        activeGuild = guildList.find(g => g.guild_id === gid);
-        document.getElementById("guild-picker").style.display = "none";
-        document.getElementById("guild-id-input").value = gid;
-
-        document.querySelectorAll("#guilds-panel tbody tr").forEach(r => r.classList.remove("active"));
-        document.querySelectorAll("#guilds-panel tbody tr").forEach(r => {
-            if (r.textContent.includes(gid)) r.classList.add("active");
-        });
-
-        Dashboard.loadLeaderboard();
-        Messenger.onGuildReady();
-        Settings.load();
-        Welcome.load();
-        Chart.load();
-        Moderation.load();
-
-        toast("✅ 已选择: " + (activeGuild?.guild_name || gid), "success");
-    }
-
-    // ====================================================================
     // UI
     // ====================================================================
     const UI = {
         switchTab(name) {
-            if (!activeGuild) {
-                showGuildPicker();
-                toast("请先选择服务器", "info");
-                return;
-            }
             document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
             document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
             document.querySelector(`.tab[onclick="UI.switchTab('${name}')"]`).classList.add("active");
             document.getElementById("tab-" + name).classList.add("active");
-
-            if (name === "settings") {
-                Settings.load();
-                Welcome.load();
-                Chart.load();
-                Moderation.load();
-            }
         }
     };
 
@@ -451,11 +381,6 @@
             try { const d = await (await api(API+"/api/health")).json(); botOnline = d.success && d.bot_connected; } catch(e) { botOnline=false; }
             BotControl.updateUI();
             await this.loadAll();
-            if (guildList.length > 0) {
-                showGuildPicker();
-            } else {
-                toast("没有可用的服务器，请确认 Bot 已加入服务器", "error");
-            }
         },
         async loadAll() { await Promise.all([this.loadStats(), this.loadGuilds()]); },
         async loadStats() {
@@ -469,11 +394,30 @@
                     guildList = d.data;
                     document.getElementById("guild-count").textContent = d.data.length;
                     panel.innerHTML = `<table><thead><tr><th>服务器</th><th>用户</th><th>最高等级</th></tr></thead><tbody>
-                        ${d.data.map(g => `<tr onclick="selectGuild('${g.guild_id}')"><td><div class="guild-name">${esc(g.guild_name||'未知')}</div><div class="guild-id">${g.guild_id}</div></td><td>${g.user_count.toLocaleString()}</td><td><span class="level-tag">Lv ${g.max_level}</span></td></tr>`).join("")}</tbody></table>`;
+                        ${d.data.map(g => `<tr onclick="selectGuild('${g.guild_id}')" style="cursor:pointer;"><td><div class="guild-name">${esc(g.guild_name||'未知')}</div><div class="guild-id">${g.guild_id}</div></td><td>${g.user_count.toLocaleString()}</td><td><span class="level-tag">Lv ${g.max_level}</span></td></tr>`).join("")}</tbody></table>`;
                 } else panel.innerHTML = '<div class="empty-state"><div class="icon">📭</div>暂无数据</div>';
             } catch(e) { panel.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div>加载失败</div>'; }
         }
     };
+
+    // ====================================================================
+    // 选服务器（从仪表盘点击）
+    // ====================================================================
+    function selectGuild(gid) {
+        activeGuild = guildList.find(g => g.guild_id === gid);
+        document.getElementById("guild-id-input").value = gid;
+
+        document.querySelectorAll("#guilds-panel tbody tr").forEach(r => r.classList.remove("active"));
+        const rows = document.querySelectorAll("#guilds-panel tbody tr");
+        rows.forEach(r => { if (r.textContent.includes(gid)) r.classList.add("active"); });
+
+        Dashboard.loadLeaderboard();
+        Messenger.onGuildReady();
+        Settings.load();
+        Moderation.load();
+
+        toast("✅ 已选择: " + (activeGuild?.guild_name || gid), "success");
+    }
 
     // ====================================================================
     // 仪表盘
@@ -533,21 +477,16 @@
             const before = val.substring(0, cp), match = before.match(/@(\S*)$/);
             const sug = document.getElementById("mention-suggestions");
 
-            if (!match) {
-                sug.classList.remove("show");
-                this.mentionIndex = -1;
-                this.updateCharCount();
-                return;
-            }
+            if (!match) { sug.classList.remove("show"); this.mentionIndex = -1; this.updateCharCount(); return; }
 
             const q = match[1].toLowerCase();
             let items = [];
-            if (q === "" || "everyone".startsWith(q)) items.push({id:"@everyone", name:"@everyone", color:"#f0a500"});
-            if (q === "" || "here".startsWith(q))     items.push({id:"@here",     name:"@here",     color:"#f0a500"});
+            if (q === "" || "everyone".startsWith(q)) items.push({id:"@everyone", name:"@everyone"});
+            if (q === "" || "here".startsWith(q))     items.push({id:"@here",     name:"@here"});
 
             if (items.length > 0) {
                 this.mentionIndex = -1;
-                sug.innerHTML = items.map((it,i) => `<div class="mention-item" data-idx="${i}" data-id="${it.id}" onmousedown="Messenger.insertMention(this)"><div class="role-icon" style="background:${it.color};">@</div><span>${esc(it.name)}</span></div>`).join("");
+                sug.innerHTML = items.map((it,i) => `<div class="mention-item" data-idx="${i}" data-id="${it.id}" onmousedown="Messenger.insertMention(this)" style="padding:8px 12px;cursor:pointer;font-size:12px;">${esc(it.name)}</div>`).join("");
                 sug.classList.add("show");
             } else {
                 sug.classList.remove("show");
@@ -628,69 +567,6 @@
                 const d = await (await api(API+"/api/settings/"+gid,{method:"POST",body:JSON.stringify({xp_rate:parseFloat(xr),voice_xp_rate:parseFloat(vr)})})).json();
                 toast(d.success?"✅ 已保存":"❌ "+d.error,d.success?"success":"error");
             } catch(e) { toast("保存失败","error"); }
-        }
-    };
-
-    // ====================================================================
-    // 欢迎消息
-    // ====================================================================
-    const Welcome = {
-        async load() {
-            if (!activeGuild) return;
-            const gid = activeGuild.guild_id;
-            try {
-                const d = await (await api(API+"/api/guilds/"+gid+"/welcome")).json();
-                if (d.success) {
-                    document.getElementById("welcome-panel").innerHTML = `
-                        <div style="margin-bottom:10px;font-size:11px;color:var(--text-muted);">可用变量: <code>{member}</code> <code>{count}</code> <code>{server}</code></div>
-                        <textarea class="settings-textarea" id="welcome-msg">${esc(d.data.welcome_message||"欢迎 {member}！你是第 {count} 位成员！")}</textarea>
-                        <div style="margin-top:12px;"><div class="settings-label">欢迎频道</div><select id="welcome-channel" class="settings-input" style="width:100%;"><option value="">-- 选择频道 --</option></select></div>
-                        <button class="btn" onclick="Welcome.save()" style="margin-top:14px;width:100%;">💾 保存欢迎设置</button>`;
-                    this._channels(gid);
-                }
-            } catch(e) {}
-        },
-        async _channels(gid) {
-            try {
-                const d = await (await api(API+"/api/guilds/"+gid+"/channels")).json();
-                if (d.success) {
-                    const sel = document.getElementById("welcome-channel");
-                    sel.innerHTML = '<option value="">-- 选择频道 --</option>';
-                    d.data.forEach(ch => { const o=document.createElement("option"); o.value=ch.id; o.textContent=(ch.category?"["+ch.category+"] ":"")+"#"+ch.name; sel.appendChild(o); });
-                }
-            } catch(e) {}
-        },
-        async save() {
-            if (!activeGuild) return;
-            const gid = activeGuild.guild_id;
-            const msg = document.getElementById("welcome-msg").value;
-            const cid = document.getElementById("welcome-channel").value;
-            try {
-                const d = await (await api(API+"/api/guilds/"+gid+"/welcome",{method:"POST",body:JSON.stringify({welcome_message:msg,channel_id:cid||null})})).json();
-                toast(d.success?"✅ 欢迎设置已保存":"❌ "+d.error,d.success?"success":"error");
-            } catch(e) { toast("保存失败","error"); }
-        }
-    };
-
-    // ====================================================================
-    // 图表
-    // ====================================================================
-    const Chart = {
-        async load() {
-            if (!activeGuild) return;
-            const gid = activeGuild.guild_id;
-            try {
-                const d = await (await api(API+"/api/guilds/"+gid+"/stats/chart")).json();
-                if (d.success) {
-                    const dt = d.data;
-                    let html = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">`;
-                    html += `<div><div style="font-size:12px;font-weight:600;margin-bottom:10px;">等级分布</div><div class="chart-container">${(dt.level_distribution||[]).slice(0,15).map(l=>`<div class="chart-bar-row"><div class="chart-bar-label">Lv${l.level}</div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${Math.max((l.count/(dt.total_members||1))*100,2)}%"></div></div><div class="chart-bar-count">${l.count}</div></div>`).join("")||'<div class="empty-state" style="padding:10px;">暂无数据</div>'}</div></div>`;
-                    html += `<div><div style="font-size:12px;font-weight:600;margin-bottom:10px;">在线状态</div><div style="display:flex;gap:20px;align-items:center;margin-top:10px;"><div style="text-align:center;"><div style="font-size:28px;font-weight:700;color:var(--success);">${dt.online_offline?.online||0}</div><div style="font-size:10px;color:var(--text-muted);">在线</div></div><div style="text-align:center;"><div style="font-size:28px;font-weight:700;color:var(--text-muted);">${dt.online_offline?.offline||0}</div><div style="font-size:10px;color:var(--text-muted);">离线</div></div></div>`;
-                    html += `<div style="font-size:12px;font-weight:600;margin-top:16px;margin-bottom:10px;">Top XP</div>${(dt.top_xp_users||[]).map((u,i)=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;"><span>${i+1}. ${esc(u.user_name)}</span><span style="color:var(--cyan);">${u.xp.toLocaleString()} XP</span></div>`).join("")||'<div class="empty-state" style="padding:10px;">暂无</div>'}</div>`;
-                    html += `</div>`;
-                    document.getElementById("chart-panel").innerHTML = html;
-                }
-            } catch(e) {}
         }
     };
 
