@@ -8,9 +8,7 @@
 </head>
 <body>
 
-    <!-- ================================================================ -->
-    <!-- 锁屏                                                              -->
-    <!-- ================================================================ -->
+    <!-- 锁屏 -->
     <div class="lockscreen" id="lockscreen">
         <div class="lock-box">
             <div class="lock-icon">🔐</div>
@@ -28,9 +26,7 @@
         </div>
     </div>
 
-    <!-- ================================================================ -->
-    <!-- 导航栏                                                            -->
-    <!-- ================================================================ -->
+    <!-- 导航栏 -->
     <nav class="navbar">
         <div class="navbar-brand">FBX<span>Bot</span></div>
         <div class="navbar-actions">
@@ -43,9 +39,7 @@
         </div>
     </nav>
 
-    <!-- ================================================================ -->
-    <!-- 主内容                                                            -->
-    <!-- ================================================================ -->
+    <!-- 主内容 -->
     <div class="container" id="main-content">
         <div class="tabs">
             <button class="tab active" onclick="UI.switchTab('dashboard')">📊 仪表盘</button>
@@ -53,7 +47,7 @@
             <button class="tab" onclick="UI.switchTab('settings')">⚙️ 设置</button>
         </div>
 
-        <!-- ==================== 仪表盘 ==================== -->
+        <!-- 仪表盘 -->
         <div class="tab-content active" id="tab-dashboard">
             <div class="stats-grid">
                 <div class="stat-card"><div class="stat-label">📊 总用户</div><div class="stat-value" id="total-users">--</div></div>
@@ -81,7 +75,7 @@
             </div>
         </div>
 
-        <!-- ==================== 消息发送 ==================== -->
+        <!-- 消息发送 -->
         <div class="tab-content" id="tab-messenger">
             <div class="content-grid single">
                 <div class="panel full">
@@ -95,7 +89,7 @@
                         <div class="guild-preview" id="guild-preview" style="display:none;"></div>
                         <div style="position:relative;">
                             <textarea id="message-content"
-                                      placeholder="输入消息... @用户 @身份组 @everyone @here"
+                                      placeholder="输入消息... @everyone @here"
                                       maxlength="2000"
                                       oninput="Messenger.onInput()"
                                       onkeydown="Messenger.onKeydown(event)"></textarea>
@@ -143,7 +137,7 @@
             </div>
         </div>
 
-        <!-- ==================== 设置 ==================== -->
+        <!-- 设置 -->
         <div class="tab-content" id="tab-settings">
             <div class="content-grid single">
 
@@ -206,7 +200,8 @@
     // 全局
     // ====================================================================
     const API  = "https://web--arcane--d9n9n2zg4zh5.code.run";
-    const SKEY = "fbxbot_auth_token", RKEY = "fbxbot_remember";
+    const SKEY = "fbxbot_auth_token";
+    const RKEY = "fbxbot_remember";
 
     let guildList    = [];
     let activeGuild  = null;
@@ -247,28 +242,50 @@
     }
 
     // ====================================================================
-    // 认证
+    // 认证 — 锁屏保持显示直到验证完成，不闪
     // ====================================================================
     const Auth = {
         async init() {
-            const r = localStorage.getItem(RKEY), t = localStorage.getItem(SKEY);
+            // 先显示锁屏
+            document.getElementById("lockscreen").classList.remove("hidden");
+            document.getElementById("password-input").focus();
+
+            // 检查记住我
+            const r = localStorage.getItem(RKEY);
+            const t = localStorage.getItem(SKEY);
             if (r === "true" && t) {
+                // 显示"自动登录中..."
+                document.getElementById("password-input").disabled = true;
+                document.getElementById("password-input").placeholder = "自动登录中...";
+                document.getElementById("lock-btn").disabled = true;
+                document.getElementById("lock-btn").textContent = "⏳ 验证中...";
+
                 const ok = await this.verify(t);
                 if (ok) {
+                    // 成功，平滑隐藏锁屏
                     document.getElementById("lockscreen").classList.add("hidden");
                     App.init();
                     return;
-                } else {
-                    localStorage.removeItem(SKEY);
                 }
+                // 失败，恢复输入
+                localStorage.removeItem(SKEY);
+                document.getElementById("password-input").disabled = false;
+                document.getElementById("password-input").placeholder = "••••••";
+                document.getElementById("password-input").value = "";
+                document.getElementById("lock-btn").disabled = false;
+                document.getElementById("lock-btn").textContent = "🔓 解锁";
+                document.getElementById("lock-error").textContent = "登录已过期，请重新输入密码";
+                document.getElementById("password-input").focus();
             }
-            document.getElementById("lockscreen").classList.remove("hidden");
-            document.getElementById("password-input").focus();
         },
+
         async verify(t) {
-            try { return (await (await api(API+"/api/verify-token",{headers:{Authorization:"Bearer "+t}})).json()).success===true; }
-            catch(e){return false;}
+            try {
+                const r = await api(API+"/api/verify-token", { headers: { Authorization: "Bearer "+t } });
+                return (await r.json()).success === true;
+            } catch(e) { return false; }
         },
+
         async unlock() {
             const pw = document.getElementById("password-input").value.trim();
             const err = document.getElementById("lock-error");
@@ -277,12 +294,17 @@
             if (!pw) { err.textContent = "请输入密码"; return; }
             btn.disabled = true; btn.textContent = "验证中..."; err.textContent = "";
             try {
-                const r = await fetch(API+"/api/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pw})});
+                const r = await fetch(API+"/api/auth",{
+                    method:"POST",
+                    headers:{"Content-Type":"application/json"},
+                    body:JSON.stringify({password:pw})
+                });
                 const d = await r.json();
                 if (d.success) {
                     document.getElementById("lockscreen").classList.add("hidden");
                     localStorage.setItem(SKEY, d.token);
-                    localStorage.setItem(RKEY, rem ? "true" : "false");
+                    if (rem) localStorage.setItem(RKEY, "true");
+                    else localStorage.removeItem(RKEY);
                     App.init();
                 } else {
                     err.textContent = d.error || "密码错误";
@@ -292,12 +314,18 @@
             } catch (e) { err.textContent = "连接失败"; }
             finally { btn.disabled = false; btn.textContent = "🔓 解锁"; }
         },
+
         lock() {
-            if (localStorage.getItem(RKEY) !== "true") localStorage.removeItem(SKEY);
+            localStorage.removeItem(SKEY);
+            localStorage.removeItem(RKEY);
             activeGuild = null;
             document.getElementById("lockscreen").classList.remove("hidden");
             document.getElementById("password-input").value = "";
+            document.getElementById("password-input").disabled = false;
+            document.getElementById("password-input").placeholder = "••••••";
             document.getElementById("lock-error").textContent = "";
+            document.getElementById("lock-btn").disabled = false;
+            document.getElementById("lock-btn").textContent = "🔓 解锁";
             document.getElementById("password-input").focus();
         }
     };
@@ -375,13 +403,11 @@
         document.getElementById("guild-picker").style.display = "none";
         document.getElementById("guild-id-input").value = gid;
 
-        // 高亮仪表盘
         document.querySelectorAll("#guilds-panel tbody tr").forEach(r => r.classList.remove("active"));
         document.querySelectorAll("#guilds-panel tbody tr").forEach(r => {
             if (r.textContent.includes(gid)) r.classList.add("active");
         });
 
-        // 刷新所有面板
         Dashboard.loadLeaderboard();
         Messenger.onGuildReady();
         Settings.load();
@@ -407,11 +433,6 @@
             document.querySelector(`.tab[onclick="UI.switchTab('${name}')"]`).classList.add("active");
             document.getElementById("tab-" + name).classList.add("active");
 
-            // 切到消息发送，如果成员还没加载，立即加载
-            if (name === "messenger" && !Messenger.members.length && !Messenger.roles.length) {
-                Messenger.onGuildReady();
-            }
-            // 切到设置，刷新
             if (name === "settings") {
                 Settings.load();
                 Welcome.load();
@@ -476,10 +497,11 @@
     };
 
     // ====================================================================
-    // 消息发送
+    // 消息发送 — @只支持 @everyone @here
     // ====================================================================
     const Messenger = {
-        members: [], roles: [], mentionIndex: -1, files: [],
+        mentionIndex: -1,
+        files: [],
 
         async onGuildReady() {
             if (!activeGuild) return;
@@ -488,7 +510,6 @@
             const cs = document.getElementById("msg-channel-select");
             cs.innerHTML = '<option value="">加载中...</option>';
 
-            // 预览
             try {
                 const d = await (await api(API+"/api/guilds/"+gid+"/preview")).json();
                 if (d.success) {
@@ -498,17 +519,6 @@
                 }
             } catch(e) {}
 
-            // 成员 + 身份组
-            try {
-                const d = await (await api(API+"/api/guilds/"+gid+"/members")).json();
-                if (d.success) {
-                    this.members = d.data.members || [];
-                    this.roles   = d.data.roles   || [];
-                    console.log("✅ 加载成员:", this.members.length, "身份组:", this.roles.length);
-                }
-            } catch(e) { this.members=[]; this.roles=[]; }
-
-            // 频道
             try {
                 const d = await (await api(API+"/api/guilds/"+gid+"/channels")).json();
                 if (d.success) {
@@ -532,29 +542,12 @@
 
             const q = match[1].toLowerCase();
             let items = [];
-
-            // @everyone / @here
-            if (q === "" || "everyone".startsWith(q)) items.push({t:"everyone", id:"@everyone", name:"@everyone", color:"#f0a500"});
-            if (q === "" || "here".startsWith(q))     items.push({t:"here",     id:"@here",     name:"@here",     color:"#f0a500"});
-
-            // 身份组
-            this.roles.filter(r => r.name.toLowerCase().includes(q)).slice(0,5).forEach(r => {
-                items.push({t:"role", id:r.id, name:"@"+r.name, color:r.color});
-            });
-
-            // 成员
-            this.members.filter(m => m.display_name.toLowerCase().includes(q) || m.username.toLowerCase().includes(q)).slice(0,8).forEach(m => {
-                items.push({t:"member", id:m.id, name:m.display_name, avatar:m.avatar_url, username:m.username});
-            });
-
-            items = items.slice(0,15);
+            if (q === "" || "everyone".startsWith(q)) items.push({id:"@everyone", name:"@everyone", color:"#f0a500"});
+            if (q === "" || "here".startsWith(q))     items.push({id:"@here",     name:"@here",     color:"#f0a500"});
 
             if (items.length > 0) {
                 this.mentionIndex = -1;
-                sug.innerHTML = items.map((it,i) => {
-                    let icon = it.avatar ? `<img src="${it.avatar}">` : (it.color ? `<div class="role-icon" style="background:${it.color};">@</div>` : `<div class="role-icon" style="background:var(--border);">@</div>`);
-                    return `<div class="mention-item" data-idx="${i}" data-id="${it.id}" data-t="${it.t}" onmousedown="Messenger.insertMention(this)">${icon}<span>${esc(it.name)}</span>${it.username?`<span style="color:var(--text-muted);font-size:10px;">@${esc(it.username)}</span>`:""}</div>`;
-                }).join("");
+                sug.innerHTML = items.map((it,i) => `<div class="mention-item" data-idx="${i}" data-id="${it.id}" onmousedown="Messenger.insertMention(this)"><div class="role-icon" style="background:${it.color};">@</div><span>${esc(it.name)}</span></div>`).join("");
                 sug.classList.add("show");
             } else {
                 sug.classList.remove("show");
@@ -576,9 +569,7 @@
 
         insertMention(el){
             const ta=document.getElementById("message-content"),val=ta.value,cp=ta.selectionStart,before=val.substring(0,cp),after=val.substring(cp);
-            const id=el.dataset.id,t=el.dataset.t;
-            let mention=t==="role"?"<@&"+id+">":t==="everyone"?"@everyone":t==="here"?"@here":"<@"+id+">";
-            ta.value=before.replace(/@\S*$/,"")+mention+" "+after;
+            ta.value=before.replace(/@\S*$/,"")+el.dataset.id+" "+after;
             document.getElementById("mention-suggestions").classList.remove("show");this.mentionIndex=-1;ta.focus();this.updateCharCount();
         },
 
@@ -707,33 +698,27 @@
     // 成员管理
     // ====================================================================
     const Moderation = {
-        members: [],
         async load() {
             if (!activeGuild) return;
             const gid = activeGuild.guild_id;
             try {
                 const d = await (await api(API+"/api/guilds/"+gid+"/members")).json();
-                console.log("成员管理数据:", d);
                 if (d.success) {
                     const list = d.data.members || d.data || [];
-                    this.members = Array.isArray(list) ? list : [];
+                    const members = Array.isArray(list) ? list : [];
                     document.getElementById("mod-panel").innerHTML = `
                         <div class="toolbar"><input type="text" id="mod-search" placeholder="搜索成员..." oninput="Moderation.filter()"></div>
                         <div style="max-height:350px;overflow-y:auto;">
                             <table><thead><tr><th>用户</th><th>ID</th><th>加入时间</th><th>操作</th></tr></thead>
-                            <tbody id="mod-members-tbody">${this.members.map(m => `<tr data-name="${esc(m.display_name).toLowerCase()}" data-username="${esc(m.username||'').toLowerCase()}">
+                            <tbody id="mod-members-tbody">${members.map(m => `<tr data-name="${esc(m.display_name).toLowerCase()}" data-username="${esc(m.username||'').toLowerCase()}">
                                 <td><div style="display:flex;align-items:center;gap:8px;"><img src="${m.avatar_url||''}" style="width:24px;height:24px;border-radius:50%;" onerror="this.style.display='none'"><span>${esc(m.display_name)}</span></div></td>
                                 <td><span class="guild-id">${m.id}</span></td>
                                 <td style="font-size:11px;color:var(--text-muted);">${m.joined_at?new Date(m.joined_at).toLocaleDateString():'-'}</td>
                                 <td><button class="btn btn-danger btn-sm" onclick="Moderation.kick('${m.id}','${esc(m.display_name)}')">踢出</button> <button class="btn btn-danger btn-sm" onclick="Moderation.ban('${m.id}','${esc(m.display_name)}')">封禁</button></td>
                             </tr>`).join("")}</tbody></table>
                         </div>`;
-                } else {
-                    document.getElementById("mod-panel").innerHTML = '<div class="empty-state">❌ '+(d.error||"获取失败")+'</div>';
                 }
-            } catch(e) {
-                document.getElementById("mod-panel").innerHTML = '<div class="empty-state">⚠️ 加载失败</div>';
-            }
+            } catch(e) {}
         },
         filter() {
             const q = (document.getElementById("mod-search")?.value||"").toLowerCase();
