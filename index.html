@@ -47,8 +47,6 @@
     <!-- 主内容                                                            -->
     <!-- ================================================================ -->
     <div class="container" id="main-content">
-
-        <!-- Tab 切换 -->
         <div class="tabs">
             <button class="tab active" onclick="UI.switchTab('dashboard')">📊 仪表盘</button>
             <button class="tab" onclick="UI.switchTab('messenger')">💬 消息发送</button>
@@ -90,11 +88,8 @@
                     <div class="panel-header">💬 通过 Bot 发送消息<span class="badge" id="msg-guild-hint">请先选择服务器</span></div>
                     <div class="panel-body">
                         <div class="toolbar">
-                            <select id="msg-guild-select" onchange="Messenger.onGuildChange()">
-                                <option value="">-- 选择服务器 --</option>
-                            </select>
-                            <select id="msg-channel-select" onchange="Messenger.onChannelChange()">
-                                <option value="">-- 先选服务器 --</option>
+                            <select id="msg-channel-select">
+                                <option value="">-- 请先在上方选择服务器 --</option>
                             </select>
                         </div>
                         <div class="guild-preview" id="guild-preview" style="display:none;"></div>
@@ -143,12 +138,6 @@
                                 <div class="preview-embed-footer" id="preview-embed-footer"></div>
                             </div>
                         </div>
-                        <div id="recent-messages" style="margin-top:14px;">
-                            <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">📜 最近消息 <span id="recent-channel-name"></span></div>
-                            <div id="recent-messages-list" style="max-height:220px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius-xs);">
-                                <div class="empty-state" style="padding:20px;">选择频道后自动显示</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -156,58 +145,37 @@
 
         <!-- ==================== 设置 ==================== -->
         <div class="tab-content" id="tab-settings">
-            <!-- 每个面板都有自己的服务器选择器 -->
             <div class="content-grid single">
 
                 <!-- 服务器设置 -->
                 <div class="panel full">
-                    <div class="panel-header">
-                        ⚙️ 服务器设置
-                        <select id="settings-guild-select" onchange="Settings.load()" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:var(--radius-xs);font-size:12px;min-width:200px;">
-                            <option value="">-- 选择服务器 --</option>
-                        </select>
-                    </div>
+                    <div class="panel-header">⚙️ 服务器设置</div>
                     <div class="panel-body" id="settings-panel">
-                        <div class="empty-state"><div class="icon">🔒</div>请先在上方选择服务器</div>
+                        <div class="empty-state"><div class="icon">🔒</div>请先在顶部选择服务器</div>
                     </div>
                 </div>
 
                 <!-- 欢迎消息 -->
                 <div class="panel full">
-                    <div class="panel-header">
-                        🔔 欢迎消息模板
-                        <select id="welcome-guild-select" onchange="Welcome.load()" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:var(--radius-xs);font-size:12px;min-width:200px;">
-                            <option value="">-- 选择服务器 --</option>
-                        </select>
-                    </div>
+                    <div class="panel-header">🔔 欢迎消息模板</div>
                     <div class="panel-body" id="welcome-panel">
-                        <div class="empty-state"><div class="icon">🔒</div>请先在上方选择服务器</div>
+                        <div class="empty-state"><div class="icon">🔒</div>请先在顶部选择服务器</div>
                     </div>
                 </div>
 
                 <!-- 图表统计 -->
                 <div class="panel full">
-                    <div class="panel-header">
-                        📈 服务器统计
-                        <select id="chart-guild-select" onchange="Chart.load()" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:var(--radius-xs);font-size:12px;min-width:200px;">
-                            <option value="">-- 选择服务器 --</option>
-                        </select>
-                    </div>
+                    <div class="panel-header">📈 服务器统计</div>
                     <div class="panel-body" id="chart-panel">
-                        <div class="empty-state"><div class="icon">📈</div>请先在上方选择服务器</div>
+                        <div class="empty-state"><div class="icon">📈</div>请先在顶部选择服务器</div>
                     </div>
                 </div>
 
                 <!-- 成员管理 -->
                 <div class="panel full">
-                    <div class="panel-header">
-                        🛡️ 成员管理
-                        <select id="mod-guild-select" onchange="Moderation.load()" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:var(--radius-xs);font-size:12px;min-width:200px;">
-                            <option value="">-- 选择服务器 --</option>
-                        </select>
-                    </div>
+                    <div class="panel-header">🛡️ 成员管理</div>
                     <div class="panel-body" id="mod-panel">
-                        <div class="empty-state"><div class="icon">🛡️</div>请先在上方选择服务器</div>
+                        <div class="empty-state"><div class="icon">🛡️</div>请先在顶部选择服务器</div>
                     </div>
                 </div>
 
@@ -217,9 +185,7 @@
                     <div class="panel-body">
                         <div class="danger-zone">
                             <div class="danger-zone-title" id="danger-title">⏹ 停止 Bot</div>
-                            <p style="font-size:11px;color:var(--text-muted);margin-bottom:10px;" id="danger-desc">
-                                这将断开 Bot 与 Discord 的连接。
-                            </p>
+                            <p style="font-size:11px;color:var(--text-muted);margin-bottom:10px;" id="danger-desc">这将断开 Bot 与 Discord 的连接。</p>
                             <button class="btn btn-danger btn-sm" id="danger-btn" onclick="BotControl.toggle()">停止 Bot</button>
                         </div>
                     </div>
@@ -228,53 +194,50 @@
         </div>
     </div>
 
+    <!-- 选服务器弹窗 -->
+    <div class="lockscreen" id="guild-picker" style="display:none;">
+        <div class="lock-box" style="padding:36px 32px;text-align:left;">
+            <div style="font-size:18px;font-weight:700;margin-bottom:6px;">🌐 选择服务器</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:20px;">请选择要管理的 Discord 服务器</div>
+            <div id="guild-picker-list" style="max-height:300px;overflow-y:auto;"></div>
+        </div>
+    </div>
+
     <!-- Toast -->
     <div class="toast-container" id="toast-container"></div>
 
-    <!-- ================================================================ -->
-    <!-- JS                                                                -->
-    <!-- ================================================================ -->
     <script>
     // ====================================================================
-    // 全局配置 & 工具函数
+    // 全局
     // ====================================================================
     const API  = "https://web--arcane--d9n9n2zg4zh5.code.run";
-    const SKEY = "fbxbot_auth_token";
-    const RKEY = "fbxbot_remember";
+    const SKEY = "fbxbot_auth_token", RKEY = "fbxbot_remember";
 
-    let guildList   = [];   // 服务器列表缓存
-    let botOnline   = true;
+    let guildList    = [];   // 所有服务器
+    let activeGuild  = null; // 当前选中的服务器 { guild_id, guild_name }
+    let botOnline    = true;
 
-    // 封装 fetch，自动带 token
     async function api(url, opts = {}) {
         const t = localStorage.getItem(SKEY);
         const h = { ...(opts.headers || {}) };
         if (t) h["Authorization"] = "Bearer " + t;
-        if (opts.body && typeof opts.body === "string" && !h["Content-Type"])
-            h["Content-Type"] = "application/json";
+        if (opts.body && typeof opts.body === "string" && !h["Content-Type"]) h["Content-Type"] = "application/json";
         return fetch(url, { ...opts, headers: h });
     }
 
-    // Toast 通知
     function toast(msg, type) {
         const c = document.getElementById("toast-container");
         const d = document.createElement("div");
-        d.className = "toast " + type;
-        d.textContent = msg;
+        d.className = "toast " + type; d.textContent = msg;
         c.appendChild(d);
-        setTimeout(() => { d.style.opacity = "0"; d.style.transition = "opacity 0.3s";
-            setTimeout(() => d.remove(), 300); }, 3000);
+        setTimeout(() => { d.style.opacity = "0"; d.style.transition = "opacity 0.3s"; setTimeout(() => d.remove(), 300); }, 3000);
     }
 
-    // HTML 转义
     function esc(s) {
         if (!s) return "";
-        const d = document.createElement("div");
-        d.textContent = s;
-        return d.innerHTML;
+        const d = document.createElement("div"); d.textContent = s; return d.innerHTML;
     }
 
-    // 数字动画
     function animate(id, target) {
         const el = document.getElementById(id);
         const cur = parseInt(el.textContent.replace(/,/g, "")) || 0;
@@ -288,37 +251,12 @@
         requestAnimationFrame(upd);
     }
 
-    // 填充所有服务器的 <select> 元素
-    function fillAllGuildSelects() {
-        const selects = [
-            "msg-guild-select",
-            "settings-guild-select",
-            "welcome-guild-select",
-            "chart-guild-select",
-            "mod-guild-select"
-        ];
-        selects.forEach(sid => {
-            const sel = document.getElementById(sid);
-            if (!sel) return;
-            const cur = sel.value;
-            sel.innerHTML = '<option value="">-- 选择服务器 --</option>';
-            guildList.forEach(g => {
-                const o = document.createElement("option");
-                o.value = g.guild_id;
-                o.textContent = (g.guild_name || "未知") + " (" + g.guild_id + ")";
-                sel.appendChild(o);
-            });
-            if (cur) sel.value = cur;
-        });
-    }
-
     // ====================================================================
-    // 认证模块
+    // 认证
     // ====================================================================
     const Auth = {
         async init() {
-            const r = localStorage.getItem(RKEY);
-            const t = localStorage.getItem(SKEY);
+            const r = localStorage.getItem(RKEY), t = localStorage.getItem(SKEY);
             if (r === "true" && t) {
                 const ok = await this.verify(t);
                 if (ok) { document.getElementById("lockscreen").classList.add("hidden"); App.init(); return; }
@@ -327,13 +265,10 @@
             document.getElementById("lockscreen").classList.remove("hidden");
             document.getElementById("password-input").focus();
         },
-
         async verify(t) {
-            try { return (await (await api(API + "/api/verify-token",
-                { headers: { Authorization: "Bearer " + t } })).json()).success === true;
-            } catch (e) { return false; }
+            try { return (await (await api(API+"/api/verify-token",{headers:{Authorization:"Bearer "+t}})).json()).success===true; }
+            catch(e){return false;}
         },
-
         async unlock() {
             const pw = document.getElementById("password-input").value.trim();
             const err = document.getElementById("lock-error");
@@ -342,11 +277,7 @@
             if (!pw) { err.textContent = "请输入密码"; return; }
             btn.disabled = true; btn.textContent = "验证中..."; err.textContent = "";
             try {
-                const r = await fetch(API + "/api/auth", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ password: pw })
-                });
+                const r = await fetch(API+"/api/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pw})});
                 const d = await r.json();
                 if (d.success) {
                     document.getElementById("lockscreen").classList.add("hidden");
@@ -361,9 +292,9 @@
             } catch (e) { err.textContent = "连接失败"; }
             finally { btn.disabled = false; btn.textContent = "🔓 解锁"; }
         },
-
         lock() {
             if (localStorage.getItem(RKEY) !== "true") localStorage.removeItem(SKEY);
+            activeGuild = null;
             document.getElementById("lockscreen").classList.remove("hidden");
             document.getElementById("password-input").value = "";
             document.getElementById("lock-error").textContent = "";
@@ -372,7 +303,7 @@
     };
 
     // ====================================================================
-    // Bot 控制模块
+    // Bot 控制
     // ====================================================================
     const BotControl = {
         updateUI() {
@@ -391,9 +322,8 @@
                 if (dt) dt.textContent = "▶ 启动 Bot";
                 if (dd) dd.textContent = "Bot 当前离线，点击启动重新连接 Discord。";
             }
-            const dot = document.getElementById("dot");
-            const st  = document.getElementById("status-text");
-            const bs  = document.getElementById("bot-status");
+            const dot = document.getElementById("dot"), st = document.getElementById("status-text"),
+                  bs  = document.getElementById("bot-status");
             if (botOnline) {
                 dot.className = "status-dot online"; st.textContent = "已连接";
                 bs.textContent = "在线"; bs.style.color = "var(--success)";
@@ -402,627 +332,383 @@
                 bs.textContent = "离线"; bs.style.color = "var(--danger)";
             }
         },
-
         async check() {
-            try {
-                const d = await (await api(API + "/api/bot-status")).json();
-                if (d.success) { botOnline = d.data.is_ready; this.updateUI(); }
-            } catch (e) {}
+            try { const d = await (await api(API+"/api/bot-status")).json(); if (d.success) { botOnline = d.data.is_ready; this.updateUI(); } } catch(e) {}
         },
-
         async toggle() {
             if (botOnline) {
                 if (!confirm("确定要停止 Bot 吗？")) return;
-                try {
-                    const d = await (await api(API + "/api/stop-bot", { method: "POST" })).json();
-                    if (d.success) { botOnline = false; this.updateUI(); toast("✅ Bot 已停止", "success"); }
-                    else toast("❌ " + (d.error || "失败"), "error");
-                } catch (e) { toast("请求失败", "error"); }
+                try { const d = await (await api(API+"/api/stop-bot",{method:"POST"})).json(); if (d.success) { botOnline=false; this.updateUI(); toast("✅ Bot 已停止","success"); } else toast("❌ "+(d.error||"失败"),"error"); } catch(e) { toast("请求失败","error"); }
             } else {
                 try {
-                    const d = await (await api(API + "/api/start-bot", { method: "POST" })).json();
+                    const d = await (await api(API+"/api/start-bot",{method:"POST"})).json();
                     if (d.success) {
-                        toast("🔄 Bot 正在启动...", "info");
-                        let cnt = 0;
-                        const iv = setInterval(async () => {
-                            cnt++;
-                            try {
-                                const s = await (await api(API + "/api/bot-status")).json();
-                                if (s.success && s.data.is_ready) {
-                                    clearInterval(iv); botOnline = true; this.updateUI();
-                                    toast("✅ Bot 已重新上线", "success"); App.loadAll();
-                                } else if (cnt >= 25) { clearInterval(iv); toast("⚠️ 启动超时", "error"); }
-                            } catch (e) {}
-                        }, 2000);
-                    } else toast("❌ " + (d.error || "失败"), "error");
-                } catch (e) { toast("请求失败", "error"); }
+                        toast("🔄 Bot 正在启动...","info"); let cnt=0;
+                        const iv=setInterval(async()=>{cnt++;try{const s=await(await api(API+"/api/bot-status")).json();if(s.success&&s.data.is_ready){clearInterval(iv);botOnline=true;this.updateUI();toast("✅ Bot 已重新上线","success");App.loadAll();}else if(cnt>=25){clearInterval(iv);toast("⚠️ 启动超时","error");}}catch(e){}},2000);
+                    } else toast("❌ "+(d.error||"失败"),"error");
+                } catch(e) { toast("请求失败","error"); }
             }
         }
     };
 
     // ====================================================================
-    // UI 模块
+    // 选服务器
+    // ====================================================================
+    function showGuildPicker() {
+        const list = document.getElementById("guild-picker-list");
+        list.innerHTML = guildList.map(g => `
+            <div onclick="selectGuild('${g.guild_id}')" style="padding:12px;cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.15s;"
+                 onmouseover="this.style.background='var(--cyan-glow)'" onmouseout="this.style.background=''">
+                <div style="font-weight:600;">${esc(g.guild_name||'未知')}</div>
+                <div style="font-size:11px;color:var(--text-muted);">${g.guild_id} · ${g.user_count} 用户</div>
+            </div>
+        `).join("");
+        document.getElementById("guild-picker").style.display = "flex";
+    }
+
+    function selectGuild(gid) {
+        activeGuild = guildList.find(g => g.guild_id === gid);
+        document.getElementById("guild-picker").style.display = "none";
+        document.getElementById("guild-id-input").value = gid;
+        // 更新所有面板
+        refreshAllPanels();
+        toast("✅ 已选择: " + (activeGuild?.guild_name || gid), "success");
+    }
+
+    function refreshAllPanels() {
+        if (!activeGuild) return;
+        Dashboard.loadLeaderboard();
+        Messenger.onGuildReady();
+        Settings.load();
+        Welcome.load();
+        Chart.load();
+        Moderation.load();
+    }
+
+    // ====================================================================
+    // UI
     // ====================================================================
     const UI = {
         switchTab(name) {
             document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
             document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
             document.querySelector(`.tab[onclick="UI.switchTab('${name}')"]`).classList.add("active");
-            document.getElementById("tab-" + name).classList.add("active");
-
-            // 切换到设置页时填充所有下拉
-            if (name === "settings") fillAllGuildSelects();
-            // 切换到消息页时填充下拉
-            if (name === "messenger") fillAllGuildSelects();
+            document.getElementById("tab-"+name).classList.add("active");
+            if (!activeGuild && name !== "dashboard") {
+                toast("请先在仪表盘选择服务器", "info");
+                showGuildPicker();
+            }
         }
     };
 
     // ====================================================================
-    // 应用初始化 & 数据加载
+    // 应用初始化
     // ====================================================================
     const App = {
         async init() {
             await BotControl.check();
-            try {
-                const d = await (await api(API + "/api/health")).json();
-                botOnline = d.success && d.bot_connected;
-            } catch (e) { botOnline = false; }
+            try { const d = await (await api(API+"/api/health")).json(); botOnline = d.success && d.bot_connected; } catch(e) { botOnline=false; }
             BotControl.updateUI();
             await this.loadAll();
+            // 加载完弹出选服务器
+            if (guildList.length > 0) {
+                setTimeout(() => showGuildPicker(), 500);
+            }
         },
-
-        async loadAll() {
-            await Promise.all([this.loadStats(), this.loadGuilds()]);
-        },
-
+        async loadAll() { await Promise.all([this.loadStats(), this.loadGuilds()]); },
         async loadStats() {
-            try {
-                const d = await (await api(API + "/api/stats")).json();
-                if (d.success) {
-                    animate("total-users",  d.data.total_users);
-                    animate("total-guilds", d.data.total_guilds);
-                    animate("max-level",    d.data.max_level);
-                }
-            } catch (e) {}
+            try { const d = await (await api(API+"/api/stats")).json(); if (d.success) { animate("total-users",d.data.total_users); animate("total-guilds",d.data.total_guilds); animate("max-level",d.data.max_level); } } catch(e) {}
         },
-
         async loadGuilds() {
-            const panel = document.getElementById("guilds-panel");
-            panel.innerHTML = '<div class="spinner"></div>';
+            const panel = document.getElementById("guilds-panel"); panel.innerHTML = '<div class="spinner"></div>';
             try {
-                const d = await (await api(API + "/api/guilds")).json();
+                const d = await (await api(API+"/api/guilds")).json();
                 if (d.success && d.data.length) {
                     guildList = d.data;
                     document.getElementById("guild-count").textContent = d.data.length;
-                    // 渲染仪表盘表格
                     panel.innerHTML = `<table><thead><tr><th>服务器</th><th>用户</th><th>最高等级</th></tr></thead><tbody>
-                        ${d.data.map(g => `<tr onclick="Dashboard.selectGuild('${g.guild_id}', this)" class="">
-                            <td><div class="guild-name">${esc(g.guild_name || "未知")}</div><div class="guild-id">${g.guild_id}</div></td>
-                            <td>${g.user_count.toLocaleString()}</td>
-                            <td><span class="level-tag">Lv ${g.max_level}</span></td>
-                        </tr>`).join("")}</tbody></table>`;
-                    // 填充所有下拉框
-                    fillAllGuildSelects();
-                } else {
-                    panel.innerHTML = '<div class="empty-state"><div class="icon">📭</div>暂无数据</div>';
-                }
-            } catch (e) { panel.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div>加载失败</div>'; }
+                        ${d.data.map(g => `<tr onclick="selectGuild('${g.guild_id}')" class=""><td><div class="guild-name">${esc(g.guild_name||'未知')}</div><div class="guild-id">${g.guild_id}</div></td><td>${g.user_count.toLocaleString()}</td><td><span class="level-tag">Lv ${g.max_level}</span></td></tr>`).join("")}</tbody></table>`;
+                } else panel.innerHTML = '<div class="empty-state"><div class="icon">📭</div>暂无数据</div>';
+            } catch(e) { panel.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div>加载失败</div>'; }
         }
     };
 
     // ====================================================================
-    // 仪表盘模块
+    // 仪表盘
     // ====================================================================
     const Dashboard = {
-        currentGuild: null,
-
-        selectGuild(gid, row) {
-            this.currentGuild = gid;
-            document.getElementById("guild-id-input").value = gid;
-            document.querySelectorAll("#guilds-panel tbody tr").forEach(r => r.classList.remove("active"));
-            if (row) row.classList.add("active");
-            this.loadLeaderboard();
-        },
-
         async loadLeaderboard() {
-            const gid = document.getElementById("guild-id-input").value.trim();
-            if (!gid) { toast("请输入服务器 ID", "error"); return; }
-            this.currentGuild = gid;
-            const lb = document.getElementById("lb-content");
-            lb.innerHTML = '<div class="spinner"></div>';
+            if (!activeGuild) return;
+            const gid = activeGuild.guild_id;
+            document.getElementById("guild-id-input").value = gid;
+            const lb = document.getElementById("lb-content"); lb.innerHTML = '<div class="spinner"></div>';
             try {
-                const d = await (await api(API + "/api/leaderboard/" + gid)).json();
+                const d = await (await api(API+"/api/leaderboard/"+gid)).json();
                 if (d.success && d.data.length) {
-                    document.getElementById("lb-count").style.display = "inline";
-                    document.getElementById("lb-count").textContent = d.data.length;
-                    const icons = { 1: "🥇", 2: "🥈", 3: "🥉" };
+                    document.getElementById("lb-count").style.display="inline"; document.getElementById("lb-count").textContent=d.data.length;
+                    const icons={1:"🥇",2:"🥈",3:"🥉"};
                     lb.innerHTML = `<table><thead><tr><th>#</th><th>用户</th><th>等级</th><th>XP</th><th>语音XP</th></tr></thead><tbody>
-                        ${d.data.map(r => `<tr>
-                            <td><span class="rank-badge ${r.rank <= 3 ? "rank-" + r.rank : "rank-other"}">${icons[r.rank] || r.rank}</span></td>
-                            <td><span class="guild-name">${esc(r.user_name || "未知")}</span><div class="guild-id">${r.user_id}</div></td>
-                            <td><span class="level-tag">Lv ${r.level}</span></td>
-                            <td>${r.xp.toLocaleString()}</td>
-                            <td style="color:var(--text-muted)">${r.voice_xp.toLocaleString()}</td>
-                        </tr>`).join("")}</tbody></table>`;
-                } else {
-                    lb.innerHTML = '<div class="empty-state"><div class="icon">🔍</div>暂无数据</div>';
-                    document.getElementById("lb-count").style.display = "none";
-                }
-            } catch (e) { lb.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div>加载失败</div>'; }
+                        ${d.data.map(r => `<tr><td><span class="rank-badge ${r.rank<=3?'rank-'+r.rank:'rank-other'}">${icons[r.rank]||r.rank}</span></td><td><span class="guild-name">${esc(r.user_name||'未知')}</span><div class="guild-id">${r.user_id}</div></td><td><span class="level-tag">Lv ${r.level}</span></td><td>${r.xp.toLocaleString()}</td><td style="color:var(--text-muted)">${r.voice_xp.toLocaleString()}</td></tr>`).join("")}</tbody></table>`;
+                } else { lb.innerHTML='<div class="empty-state"><div class="icon">🔍</div>暂无数据</div>'; document.getElementById("lb-count").style.display="none"; }
+            } catch(e) { lb.innerHTML='<div class="empty-state"><div class="icon">⚠️</div>加载失败</div>'; }
         }
     };
 
     // ====================================================================
-    // 消息发送模块
+    // 消息发送
     // ====================================================================
     const Messenger = {
-        members: [],
-        roles:   [],
-        mentionIndex: -1,
-        files:   [],
+        members: [], roles: [], mentionIndex: -1, files: [],
+        channels: [],
 
-        // ---- 选服务器 ----
-        async onGuildChange() {
-            const gid = document.getElementById("msg-guild-select").value;
-            const cs  = document.getElementById("msg-channel-select");
-            const pv  = document.getElementById("guild-preview");
-            if (!gid) {
-                cs.innerHTML = '<option value="">-- 先选服务器 --</option>';
-                pv.style.display = "none";
-                document.getElementById("msg-guild-hint").textContent = "请先选择服务器";
-                this.members = []; this.roles = [];
-                return;
-            }
-            document.getElementById("msg-guild-hint").textContent = gid;
+        async onGuildReady() {
+            if (!activeGuild) return;
+            const gid = activeGuild.guild_id;
+            document.getElementById("msg-guild-hint").textContent = activeGuild.guild_name || gid;
+            const cs = document.getElementById("msg-channel-select");
             cs.innerHTML = '<option value="">加载中...</option>';
 
-            // 加载预览
+            // 预览
             try {
-                const d = await (await api(API + "/api/guilds/" + gid + "/preview")).json();
+                const d = await (await api(API+"/api/guilds/"+gid+"/preview")).json();
                 if (d.success) {
                     const g = d.data;
-                    pv.style.display = "grid";
-                    pv.innerHTML = `<div class="guild-preview-item"><div class="val">${g.member_count}</div><div class="lbl">成员</div></div>
-                        <div class="guild-preview-item"><div class="val">${g.online_count}</div><div class="lbl">在线</div></div>
-                        <div class="guild-preview-item"><div class="val">${g.text_channels}</div><div class="lbl">文字频道</div></div>
-                        <div class="guild-preview-item"><div class="val">${g.voice_channels}</div><div class="lbl">语音频道</div></div>`;
+                    document.getElementById("guild-preview").style.display="grid";
+                    document.getElementById("guild-preview").innerHTML = `<div class="guild-preview-item"><div class="val">${g.member_count}</div><div class="lbl">成员</div></div><div class="guild-preview-item"><div class="val">${g.online_count}</div><div class="lbl">在线</div></div><div class="guild-preview-item"><div class="val">${g.text_channels}</div><div class="lbl">文字频道</div></div><div class="guild-preview-item"><div class="val">${g.voice_channels}</div><div class="lbl">语音频道</div></div>`;
                 }
-            } catch (e) {}
+            } catch(e) {}
 
-            // 加载成员 + 身份组
+            // 成员 + 身份组
             try {
-                const d = await (await api(API + "/api/guilds/" + gid + "/members")).json();
-                if (d.success) {
-                    this.members = d.data.members || [];
-                    this.roles   = d.data.roles   || [];
-                    console.log("加载成员:", this.members.length, "身份组:", this.roles.length);
-                }
-            } catch (e) { this.members = []; this.roles = []; }
+                const d = await (await api(API+"/api/guilds/"+gid+"/members")).json();
+                if (d.success) { this.members = d.data.members || []; this.roles = d.data.roles || []; }
+            } catch(e) { this.members=[]; this.roles=[]; }
 
-            // 加载频道
+            // 频道
             try {
-                const d = await (await api(API + "/api/guilds/" + gid + "/channels")).json();
+                const d = await (await api(API+"/api/guilds/"+gid+"/channels")).json();
                 if (d.success) {
+                    this.channels = d.data;
                     cs.innerHTML = '<option value="">-- 选择频道 --</option>';
-                    d.data.forEach(ch => {
-                        const o = document.createElement("option");
-                        o.value = ch.id;
-                        o.textContent = (ch.category ? "[" + ch.category + "] " : "") + "#" + ch.name;
-                        cs.appendChild(o);
-                    });
+                    d.data.forEach(ch => { const o=document.createElement("option"); o.value=ch.id; o.textContent=(ch.category?"["+ch.category+"] ":"")+"#"+ch.name; cs.appendChild(o); });
                 } else cs.innerHTML = '<option value="">获取失败</option>';
-            } catch (e) { cs.innerHTML = '<option value="">获取失败</option>'; }
+            } catch(e) { cs.innerHTML='<option value="">获取失败</option>'; }
         },
 
-        // ---- 选频道 ----
-        onChannelChange() {
-            const cid = document.getElementById("msg-channel-select").value;
-            if (cid) {
-                const ch = document.querySelector("#msg-channel-select option:checked").textContent;
-                document.getElementById("msg-guild-hint").textContent = ch;
-                this.loadRecent(cid);
-            }
-        },
-
-        // ---- 最近消息 ----
-        async loadRecent(cid) {
-            document.getElementById("recent-channel-name").textContent = "";
-            try {
-                const d = await (await api(API + "/api/channels/" + cid + "/messages?limit=15")).json();
-                if (d.success && d.data.length) {
-                    document.getElementById("recent-channel-name").textContent = "(最新 " + d.data.length + " 条)";
-                    document.getElementById("recent-messages-list").innerHTML = d.data.reverse().map(m => `
-                        <div class="msg-item">
-                            <img class="msg-avatar" src="${m.avatar_url || ""}" onerror="this.style.display='none'">
-                            <div class="msg-body">
-                                <div class="msg-author" style="color:${m.color || "var(--text)"};">${esc(m.author)}
-                                    <span style="font-weight:400;font-size:10px;color:var(--text-muted);margin-left:6px;">${m.timestamp}</span>
-                                </div>
-                                <div class="msg-text">${esc(m.content).substring(0, 400)}</div>
-                                ${m.attachments ? `<div class="msg-attachments">${m.attachments.map(a => `<a href="${a.url}" target="_blank">📎 ${esc(a.filename)}</a>`).join(" ")}</div>` : ""}
-                            </div>
-                        </div>`).join("");
-                } else {
-                    document.getElementById("recent-messages-list").innerHTML = '<div class="empty-state" style="padding:20px;">暂无消息</div>';
-                }
-            } catch (e) {}
-        },
-
-        // ---- @提及 ----
         onInput() {
-            const ta   = document.getElementById("message-content");
-            const val  = ta.value;
-            const cp   = ta.selectionStart;
-            const before = val.substring(0, cp);
-            const match  = before.match(/@(\S*)$/);
-            const sug    = document.getElementById("mention-suggestions");
-
-            if (!match || (!this.members.length && !this.roles.length)) {
-                sug.classList.remove("show");
-                this.mentionIndex = -1;
-                this.updateCharCount();
-                return;
-            }
-
+            const ta = document.getElementById("message-content"), val = ta.value, cp = ta.selectionStart;
+            const before = val.substring(0, cp), match = before.match(/@(\S*)$/);
+            const sug = document.getElementById("mention-suggestions");
+            if (!match || (!this.members.length && !this.roles.length)) { sug.classList.remove("show"); this.mentionIndex=-1; this.updateCharCount(); return; }
             const q = match[1].toLowerCase();
             let items = [];
-
-            // @everyone / @here
-            if (q === "" || "everyone".startsWith(q)) items.push({ t: "everyone", id: "@everyone", name: "@everyone", color: "#f0a500" });
-            if (q === "" || "here".startsWith(q))     items.push({ t: "here",     id: "@here",     name: "@here",     color: "#f0a500" });
-
-            // 身份组
-            this.roles.filter(r => r.name.toLowerCase().includes(q)).slice(0, 5).forEach(r => {
-                items.push({ t: "role", id: r.id, name: "@" + r.name, color: r.color });
-            });
-
-            // 成员
-            this.members.filter(m => m.display_name.toLowerCase().includes(q) || m.username.toLowerCase().includes(q)).slice(0, 8).forEach(m => {
-                items.push({ t: "member", id: m.id, name: m.display_name, avatar: m.avatar_url, username: m.username });
-            });
-
-            items = items.slice(0, 15);
-
-            if (items.length > 0) {
-                this.mentionIndex = -1;
-                sug.innerHTML = items.map((it, i) => {
-                    let icon = "";
-                    if (it.avatar) icon = `<img src="${it.avatar}">`;
-                    else if (it.color) icon = `<div class="role-icon" style="background:${it.color};">@</div>`;
-                    else icon = `<div class="role-icon" style="background:var(--border);">@</div>`;
-                    return `<div class="mention-item" data-idx="${i}" data-id="${it.id}" data-t="${it.t}" onmousedown="Messenger.insertMention(this)">
-                        ${icon}<span>${esc(it.name)}</span>${it.username ? `<span style="color:var(--text-muted);font-size:10px;">@${esc(it.username)}</span>` : ""}
-                    </div>`;
+            if (q===""||"everyone".startsWith(q)) items.push({t:"everyone",id:"@everyone",name:"@everyone",color:"#f0a500"});
+            if (q===""||"here".startsWith(q)) items.push({t:"here",id:"@here",name:"@here",color:"#f0a500"});
+            this.roles.filter(r=>r.name.toLowerCase().includes(q)).slice(0,5).forEach(r=>items.push({t:"role",id:r.id,name:"@"+r.name,color:r.color}));
+            this.members.filter(m=>m.display_name.toLowerCase().includes(q)||m.username.toLowerCase().includes(q)).slice(0,8).forEach(m=>items.push({t:"member",id:m.id,name:m.display_name,avatar:m.avatar_url,username:m.username}));
+            items=items.slice(0,15);
+            if (items.length>0) {
+                this.mentionIndex=-1;
+                sug.innerHTML = items.map((it,i) => {
+                    let icon = it.avatar ? `<img src="${it.avatar}">` : (it.color ? `<div class="role-icon" style="background:${it.color};">@</div>` : `<div class="role-icon" style="background:var(--border);">@</div>`);
+                    return `<div class="mention-item" data-idx="${i}" data-id="${it.id}" data-t="${it.t}" onmousedown="Messenger.insertMention(this)">${icon}<span>${esc(it.name)}</span>${it.username?`<span style="color:var(--text-muted);font-size:10px;">@${esc(it.username)}</span>`:""}</div>`;
                 }).join("");
                 sug.classList.add("show");
-            } else {
-                sug.classList.remove("show");
-            }
+            } else { sug.classList.remove("show"); }
             this.updateCharCount();
         },
-
         onKeydown(e) {
             const sug = document.getElementById("mention-suggestions");
             if (!sug.classList.contains("show")) return;
             const items = sug.querySelectorAll(".mention-item");
-            if (e.key === "ArrowDown") {
-                e.preventDefault();
-                this.mentionIndex = Math.min(this.mentionIndex + 1, items.length - 1);
-                this._highlight(items);
-            } else if (e.key === "ArrowUp") {
-                e.preventDefault();
-                this.mentionIndex = Math.max(this.mentionIndex - 1, 0);
-                this._highlight(items);
-            } else if (e.key === "Enter" && this.mentionIndex >= 0) {
-                e.preventDefault();
-                this.insertMention(items[this.mentionIndex]);
-            } else if (e.key === "Escape") {
-                sug.classList.remove("show");
-                this.mentionIndex = -1;
-            }
+            if (e.key==="ArrowDown"){e.preventDefault();this.mentionIndex=Math.min(this.mentionIndex+1,items.length-1);this._hl(items);}
+            else if(e.key==="ArrowUp"){e.preventDefault();this.mentionIndex=Math.max(this.mentionIndex-1,0);this._hl(items);}
+            else if(e.key==="Enter"&&this.mentionIndex>=0){e.preventDefault();this.insertMention(items[this.mentionIndex]);}
+            else if(e.key==="Escape"){sug.classList.remove("show");this.mentionIndex=-1;}
         },
-
-        _highlight(items) {
-            items.forEach((it, i) => it.style.background = i === this.mentionIndex ? "var(--cyan-glow)" : "");
+        _hl(items){items.forEach((it,i)=>it.style.background=i===this.mentionIndex?"var(--cyan-glow)":"");},
+        insertMention(el){
+            const ta=document.getElementById("message-content"),val=ta.value,cp=ta.selectionStart,before=val.substring(0,cp),after=val.substring(cp);
+            const id=el.dataset.id,t=el.dataset.t;
+            let mention=t==="role"?"<@&"+id+">":t==="everyone"?"@everyone":t==="here"?"@here":"<@"+id+">";
+            ta.value=before.replace(/@\S*$/,"")+mention+" "+after;
+            document.getElementById("mention-suggestions").classList.remove("show");this.mentionIndex=-1;ta.focus();this.updateCharCount();
         },
-
-        insertMention(el) {
-            const ta = document.getElementById("message-content");
-            const val = ta.value;
-            const cp  = ta.selectionStart;
-            const before = val.substring(0, cp);
-            const after  = val.substring(cp);
-            const id  = el.dataset.id;
-            const t   = el.dataset.t;
-            let mention = t === "role" ? "<@&" + id + ">" :
-                          t === "everyone" ? "@everyone" :
-                          t === "here" ? "@here" : "<@" + id + ">";
-            ta.value = before.replace(/@\S*$/, "") + mention + " " + after;
-            document.getElementById("mention-suggestions").classList.remove("show");
-            this.mentionIndex = -1;
-            ta.focus();
-            this.updateCharCount();
+        updateCharCount(){const l=document.getElementById("message-content").value.length,el=document.getElementById("char-count");el.textContent=l+" / 2000";el.className="char-count"+(l>1800?" warn":"")+(l>1950?" danger":"");},
+        toggleEmbed(){document.getElementById("embed-options").style.display=document.getElementById("embed-enabled").checked?"grid":"none";},
+        handleFiles(fl){for(const f of fl){if(f.size>8*1024*1024){toast(f.name+" 超过8MB","error");continue;}this.files.push(f);}this._rf();},
+        _rf(){document.getElementById("file-list").innerHTML=this.files.map((f,i)=>`<div class="file-tag">📄 ${esc(f.name)} (${(f.size/1024).toFixed(1)}KB) <span class="remove" onclick="Messenger.removeFile(${i})">×</span></div>`).join("");},
+        removeFile(i){this.files.splice(i,1);this._rf();},
+        preview(){
+            const c=document.getElementById("message-content").value;document.getElementById("message-preview").classList.add("show");
+            document.getElementById("preview-content").textContent=c||"(空消息)";
+            const pe=document.getElementById("preview-embed");
+            if(document.getElementById("embed-enabled").checked){pe.style.display="block";pe.style.borderLeftColor=document.getElementById("embed-color").value||"#00b4d8";document.getElementById("preview-embed-title").textContent=document.getElementById("embed-title").value||"(无标题)";document.getElementById("preview-embed-desc").textContent=document.getElementById("embed-description").value||"(无描述)";document.getElementById("preview-embed-footer").textContent=document.getElementById("embed-footer").value||"";}else pe.style.display="none";
         },
-
-        updateCharCount() {
-            const l = document.getElementById("message-content").value.length;
-            const el = document.getElementById("char-count");
-            el.textContent = l + " / 2000";
-            el.className = "char-count" + (l > 1800 ? " warn" : "") + (l > 1950 ? " danger" : "");
-        },
-
-        // ---- Embed ----
-        toggleEmbed() {
-            document.getElementById("embed-options").style.display =
-                document.getElementById("embed-enabled").checked ? "grid" : "none";
-        },
-
-        // ---- 文件 ----
-        handleFiles(fl) {
-            for (const f of fl) {
-                if (f.size > 8 * 1024 * 1024) { toast(f.name + " 超过 8MB", "error"); continue; }
-                this.files.push(f);
-            }
-            this._renderFiles();
-        },
-        _renderFiles() {
-            document.getElementById("file-list").innerHTML = this.files.map((f, i) =>
-                `<div class="file-tag">📄 ${esc(f.name)} (${(f.size / 1024).toFixed(1)}KB) <span class="remove" onclick="Messenger.removeFile(${i})">×</span></div>`
-            ).join("");
-        },
-        removeFile(i) { this.files.splice(i, 1); this._renderFiles(); },
-
-        // ---- 预览 ----
-        preview() {
-            const c = document.getElementById("message-content").value;
-            document.getElementById("message-preview").classList.add("show");
-            document.getElementById("preview-content").textContent = c || "(空消息)";
-            const pe = document.getElementById("preview-embed");
-            if (document.getElementById("embed-enabled").checked) {
-                pe.style.display = "block";
-                pe.style.borderLeftColor = document.getElementById("embed-color").value || "#00b4d8";
-                document.getElementById("preview-embed-title").textContent  = document.getElementById("embed-title").value || "(无标题)";
-                document.getElementById("preview-embed-desc").textContent   = document.getElementById("embed-description").value || "(无描述)";
-                document.getElementById("preview-embed-footer").textContent = document.getElementById("embed-footer").value || "";
-            } else pe.style.display = "none";
-        },
-
-        // ---- 发送 ----
-        async send() {
-            const cid     = document.getElementById("msg-channel-select").value;
-            const content = document.getElementById("message-content").value.trim();
-            if (!cid)    { toast("请选择频道", "error"); return; }
-            if (!content && !this.files.length) { toast("请输入内容或上传文件", "error"); return; }
-            const btn = document.getElementById("send-btn");
-            btn.disabled = true; btn.textContent = "发送中...";
-            try {
-                const fd = new FormData();
-                fd.append("channel_id", cid);
-                fd.append("content", content);
-                if (document.getElementById("embed-enabled").checked) {
-                    fd.append("embed_enabled", "true");
-                    fd.append("embed_title", document.getElementById("embed-title").value);
-                    fd.append("embed_description", document.getElementById("embed-description").value);
-                    fd.append("embed_color", document.getElementById("embed-color").value);
-                    fd.append("embed_footer", document.getElementById("embed-footer").value);
-                    fd.append("embed_thumbnail", document.getElementById("embed-thumbnail").value);
-                }
-                this.files.forEach(f => fd.append("files", f));
-                const d = await (await api(API + "/api/send-message", { method: "POST", headers: {}, body: fd })).json();
-                if (d.success) {
-                    toast("✅ 已发送到 #" + d.data.channel_name, "success");
-                    document.getElementById("message-content").value = "";
-                    this.updateCharCount();
-                    this.files = []; this._renderFiles();
-                    document.getElementById("message-preview").classList.remove("show");
-                    this.loadRecent(cid);
-                } else toast("❌ " + (d.error || "失败"), "error");
-            } catch (e) { toast("发送失败", "error"); }
-            finally { btn.disabled = false; btn.textContent = "📨 发送"; }
+        async send(){
+            const cid=document.getElementById("msg-channel-select").value,content=document.getElementById("message-content").value.trim();
+            if(!cid){toast("请选择频道","error");return;}if(!content&&!this.files.length){toast("请输入内容或上传文件","error");return;}
+            const btn=document.getElementById("send-btn");btn.disabled=true;btn.textContent="发送中...";
+            try{
+                const fd=new FormData();fd.append("channel_id",cid);fd.append("content",content);
+                if(document.getElementById("embed-enabled").checked){fd.append("embed_enabled","true");fd.append("embed_title",document.getElementById("embed-title").value);fd.append("embed_description",document.getElementById("embed-description").value);fd.append("embed_color",document.getElementById("embed-color").value);fd.append("embed_footer",document.getElementById("embed-footer").value);fd.append("embed_thumbnail",document.getElementById("embed-thumbnail").value);}
+                this.files.forEach(f=>fd.append("files",f));
+                const d=(await(await api(API+"/api/send-message",{method:"POST",headers:{},body:fd})).json());
+                if(d.success){toast("✅ 已发送到 #"+d.data.channel_name,"success");document.getElementById("message-content").value="";this.updateCharCount();this.files=[];this._rf();document.getElementById("message-preview").classList.remove("show");}else toast("❌ "+(d.error||"失败"),"error");
+            }catch(e){toast("发送失败","error");}finally{btn.disabled=false;btn.textContent="📨 发送";}
         }
     };
 
     // ====================================================================
-    // 设置模块
+    // 设置
     // ====================================================================
     const Settings = {
         async load() {
-            const gid = document.getElementById("settings-guild-select").value;
-            if (!gid) {
-                document.getElementById("settings-panel").innerHTML = '<div class="empty-state"><div class="icon">🔒</div>请先在上方选择服务器</div>';
-                return;
-            }
+            if (!activeGuild) return;
+            const gid = activeGuild.guild_id, gn = activeGuild.guild_name;
             try {
-                const d = await (await api(API + "/api/settings/" + gid)).json();
-                const gn = (guildList.find(g => g.guild_id === gid) || {}).guild_name || gid;
+                const d = await (await api(API+"/api/settings/"+gid)).json();
                 if (d.success) {
                     document.getElementById("settings-panel").innerHTML = `
                         <div style="margin-bottom:14px;font-size:12px;color:var(--text-secondary);">编辑: <strong style="color:var(--text);">${esc(gn)}</strong></div>
-                        <div class="settings-row">
-                            <div><div class="settings-label">经验倍率</div><div class="settings-desc">消息 XP 倍率 (0.1-10.0)</div></div>
-                            <div style="display:flex;align-items:center;gap:6px;">
-                                <input type="number" class="settings-input" id="setting-xp-rate" value="${d.data.xp_rate || 1.0}" min="0.1" max="10.0" step="0.1">
-                                <span style="font-size:11px;color:var(--text-muted);">×</span>
-                            </div>
-                        </div>
-                        <div class="settings-row">
-                            <div><div class="settings-label">语音经验倍率</div><div class="settings-desc">语音 XP 倍率 (0.1-10.0)</div></div>
-                            <div style="display:flex;align-items:center;gap:6px;">
-                                <input type="number" class="settings-input" id="setting-voice-xp-rate" value="${d.data.voice_xp_rate || 1.0}" min="0.1" max="10.0" step="0.1">
-                                <span style="font-size:11px;color:var(--text-muted);">×</span>
-                            </div>
-                        </div>
+                        <div class="settings-row"><div><div class="settings-label">经验倍率</div><div class="settings-desc">消息 XP 倍率 (0.1-10.0)</div></div><div style="display:flex;align-items:center;gap:6px;"><input type="number" class="settings-input" id="setting-xp-rate" value="${d.data.xp_rate||1.0}" min="0.1" max="10.0" step="0.1"><span style="font-size:11px;color:var(--text-muted);">×</span></div></div>
+                        <div class="settings-row"><div><div class="settings-label">语音经验倍率</div><div class="settings-desc">语音 XP 倍率 (0.1-10.0)</div></div><div style="display:flex;align-items:center;gap:6px;"><input type="number" class="settings-input" id="setting-voice-xp-rate" value="${d.data.voice_xp_rate||1.0}" min="0.1" max="10.0" step="0.1"><span style="font-size:11px;color:var(--text-muted);">×</span></div></div>
                         <button class="btn" onclick="Settings.save()" style="margin-top:14px;width:100%;">💾 保存</button>`;
                 }
-            } catch (e) {}
+            } catch(e) {}
         },
         async save() {
-            const gid = document.getElementById("settings-guild-select").value;
-            const xr  = document.getElementById("setting-xp-rate")?.value;
-            const vr  = document.getElementById("setting-voice-xp-rate")?.value;
+            if (!activeGuild) return;
+            const gid = activeGuild.guild_id;
+            const xr = document.getElementById("setting-xp-rate")?.value;
+            const vr = document.getElementById("setting-voice-xp-rate")?.value;
             try {
-                const d = await (await api(API + "/api/settings/" + gid, {
-                    method: "POST",
-                    body: JSON.stringify({ xp_rate: parseFloat(xr), voice_xp_rate: parseFloat(vr) })
-                })).json();
-                toast(d.success ? "✅ 已保存" : "❌ " + d.error, d.success ? "success" : "error");
-            } catch (e) { toast("保存失败", "error"); }
+                const d = await (await api(API+"/api/settings/"+gid,{method:"POST",body:JSON.stringify({xp_rate:parseFloat(xr),voice_xp_rate:parseFloat(vr)})})).json();
+                toast(d.success?"✅ 已保存":"❌ "+d.error,d.success?"success":"error");
+            } catch(e) { toast("保存失败","error"); }
         }
     };
 
     // ====================================================================
-    // 欢迎消息模块
+    // 欢迎消息
     // ====================================================================
     const Welcome = {
         async load() {
-            const gid = document.getElementById("welcome-guild-select").value;
-            if (!gid) {
-                document.getElementById("welcome-panel").innerHTML = '<div class="empty-state"><div class="icon">🔒</div>请先在上方选择服务器</div>';
-                return;
-            }
+            if (!activeGuild) return;
+            const gid = activeGuild.guild_id;
             try {
-                const d = await (await api(API + "/api/guilds/" + gid + "/welcome")).json();
+                const d = await (await api(API+"/api/guilds/"+gid+"/welcome")).json();
                 if (d.success) {
                     document.getElementById("welcome-panel").innerHTML = `
                         <div style="margin-bottom:10px;font-size:11px;color:var(--text-muted);">可用变量: <code>{member}</code> <code>{count}</code> <code>{server}</code></div>
-                        <textarea class="settings-textarea" id="welcome-msg">${esc(d.data.welcome_message || "欢迎 {member}！你是第 {count} 位成员！")}</textarea>
+                        <textarea class="settings-textarea" id="welcome-msg">${esc(d.data.welcome_message||"欢迎 {member}！你是第 {count} 位成员！")}</textarea>
                         <div style="margin-top:12px;"><div class="settings-label">欢迎频道</div><select id="welcome-channel" class="settings-input" style="width:100%;"><option value="">-- 选择频道 --</option></select></div>
                         <button class="btn" onclick="Welcome.save()" style="margin-top:14px;width:100%;">💾 保存欢迎设置</button>`;
-                    this._loadChannels(gid);
+                    this._channels(gid);
                 }
-            } catch (e) {}
+            } catch(e) {}
         },
-        async _loadChannels(gid) {
+        async _channels(gid) {
             try {
-                const d = await (await api(API + "/api/guilds/" + gid + "/channels")).json();
+                const d = await (await api(API+"/api/guilds/"+gid+"/channels")).json();
                 if (d.success) {
                     const sel = document.getElementById("welcome-channel");
                     sel.innerHTML = '<option value="">-- 选择频道 --</option>';
-                    d.data.forEach(ch => {
-                        const o = document.createElement("option");
-                        o.value = ch.id;
-                        o.textContent = (ch.category ? "[" + ch.category + "] " : "") + "#" + ch.name;
-                        sel.appendChild(o);
-                    });
+                    d.data.forEach(ch => { const o=document.createElement("option"); o.value=ch.id; o.textContent=(ch.category?"["+ch.category+"] ":"")+"#"+ch.name; sel.appendChild(o); });
                 }
-            } catch (e) {}
+            } catch(e) {}
         },
         async save() {
-            const gid = document.getElementById("welcome-guild-select").value;
+            if (!activeGuild) return;
+            const gid = activeGuild.guild_id;
             const msg = document.getElementById("welcome-msg").value;
             const cid = document.getElementById("welcome-channel").value;
             try {
-                const d = await (await api(API + "/api/guilds/" + gid + "/welcome", {
-                    method: "POST",
-                    body: JSON.stringify({ welcome_message: msg, channel_id: cid || null })
-                })).json();
-                toast(d.success ? "✅ 欢迎设置已保存" : "❌ " + d.error, d.success ? "success" : "error");
-            } catch (e) { toast("保存失败", "error"); }
+                const d = await (await api(API+"/api/guilds/"+gid+"/welcome",{method:"POST",body:JSON.stringify({welcome_message:msg,channel_id:cid||null})})).json();
+                toast(d.success?"✅ 欢迎设置已保存":"❌ "+d.error,d.success?"success":"error");
+            } catch(e) { toast("保存失败","error"); }
         }
     };
 
     // ====================================================================
-    // 图表统计模块
+    // 图表
     // ====================================================================
     const Chart = {
         async load() {
-            const gid = document.getElementById("chart-guild-select").value;
-            if (!gid) {
-                document.getElementById("chart-panel").innerHTML = '<div class="empty-state"><div class="icon">📈</div>请先在上方选择服务器</div>';
-                return;
-            }
+            if (!activeGuild) return;
+            const gid = activeGuild.guild_id;
             try {
-                const d = await (await api(API + "/api/guilds/" + gid + "/stats/chart")).json();
+                const d = await (await api(API+"/api/guilds/"+gid+"/stats/chart")).json();
                 if (d.success) {
                     const dt = d.data;
                     let html = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">`;
-                    html += `<div><div style="font-size:12px;font-weight:600;margin-bottom:10px;">等级分布</div><div class="chart-container">${(dt.level_distribution || []).slice(0, 15).map(l => `<div class="chart-bar-row"><div class="chart-bar-label">Lv${l.level}</div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${Math.max((l.count / (dt.total_members || 1)) * 100, 2)}%"></div></div><div class="chart-bar-count">${l.count}</div></div>`).join("") || '<div class="empty-state" style="padding:10px;">暂无数据</div>'}</div></div>`;
-                    html += `<div><div style="font-size:12px;font-weight:600;margin-bottom:10px;">在线状态</div><div style="display:flex;gap:20px;align-items:center;margin-top:10px;"><div style="text-align:center;"><div style="font-size:28px;font-weight:700;color:var(--success);">${dt.online_offline?.online || 0}</div><div style="font-size:10px;color:var(--text-muted);">在线</div></div><div style="text-align:center;"><div style="font-size:28px;font-weight:700;color:var(--text-muted);">${dt.online_offline?.offline || 0}</div><div style="font-size:10px;color:var(--text-muted);">离线</div></div></div>`;
-                    html += `<div style="font-size:12px;font-weight:600;margin-top:16px;margin-bottom:10px;">Top XP</div>${(dt.top_xp_users || []).map((u, i) => `<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;"><span>${i + 1}. ${esc(u.user_name)}</span><span style="color:var(--cyan);">${u.xp.toLocaleString()} XP</span></div>`).join("") || '<div class="empty-state" style="padding:10px;">暂无</div>'}</div>`;
+                    html += `<div><div style="font-size:12px;font-weight:600;margin-bottom:10px;">等级分布</div><div class="chart-container">${(dt.level_distribution||[]).slice(0,15).map(l=>`<div class="chart-bar-row"><div class="chart-bar-label">Lv${l.level}</div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${Math.max((l.count/(dt.total_members||1))*100,2)}%"></div></div><div class="chart-bar-count">${l.count}</div></div>`).join("")||'<div class="empty-state" style="padding:10px;">暂无数据</div>'}</div></div>`;
+                    html += `<div><div style="font-size:12px;font-weight:600;margin-bottom:10px;">在线状态</div><div style="display:flex;gap:20px;align-items:center;margin-top:10px;"><div style="text-align:center;"><div style="font-size:28px;font-weight:700;color:var(--success);">${dt.online_offline?.online||0}</div><div style="font-size:10px;color:var(--text-muted);">在线</div></div><div style="text-align:center;"><div style="font-size:28px;font-weight:700;color:var(--text-muted);">${dt.online_offline?.offline||0}</div><div style="font-size:10px;color:var(--text-muted);">离线</div></div></div>`;
+                    html += `<div style="font-size:12px;font-weight:600;margin-top:16px;margin-bottom:10px;">Top XP</div>${(dt.top_xp_users||[]).map((u,i)=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;"><span>${i+1}. ${esc(u.user_name)}</span><span style="color:var(--cyan);">${u.xp.toLocaleString()} XP</span></div>`).join("")||'<div class="empty-state" style="padding:10px;">暂无</div>'}</div>`;
                     html += `</div>`;
                     document.getElementById("chart-panel").innerHTML = html;
                 }
-            } catch (e) {}
+            } catch(e) {}
         }
     };
 
     // ====================================================================
-    // 成员管理模块
+    // 成员管理
     // ====================================================================
     const Moderation = {
         members: [],
         async load() {
-            const gid = document.getElementById("mod-guild-select").value;
-            if (!gid) {
-                document.getElementById("mod-panel").innerHTML = '<div class="empty-state"><div class="icon">🛡️</div>请先在上方选择服务器</div>';
-                return;
-            }
+            if (!activeGuild) return;
+            const gid = activeGuild.guild_id;
             try {
-                const d = await (await api(API + "/api/guilds/" + gid + "/members")).json();
+                const d = await (await api(API+"/api/guilds/"+gid+"/members")).json();
+                console.log("成员数据:", d);
                 if (d.success) {
                     this.members = d.data.members || [];
                     document.getElementById("mod-panel").innerHTML = `
                         <div class="toolbar"><input type="text" id="mod-search" placeholder="搜索成员..." oninput="Moderation.filter()"></div>
                         <div style="max-height:350px;overflow-y:auto;">
                             <table><thead><tr><th>用户</th><th>ID</th><th>加入时间</th><th>操作</th></tr></thead>
-                            <tbody id="mod-members-tbody">${this.members.map(m => `<tr data-name="${esc(m.display_name).toLowerCase()}" data-username="${esc(m.username).toLowerCase()}">
-                                <td><div style="display:flex;align-items:center;gap:8px;"><img src="${m.avatar_url || ""}" style="width:24px;height:24px;border-radius:50%;" onerror="this.style.display='none'"><span>${esc(m.display_name)}</span></div></td>
+                            <tbody id="mod-members-tbody">${this.members.map(m => `<tr data-name="${esc(m.display_name).toLowerCase()}" data-username="${esc(m.username||'').toLowerCase()}">
+                                <td><div style="display:flex;align-items:center;gap:8px;"><img src="${m.avatar_url||''}" style="width:24px;height:24px;border-radius:50%;" onerror="this.style.display='none'"><span>${esc(m.display_name)}</span></div></td>
                                 <td><span class="guild-id">${m.id}</span></td>
-                                <td style="font-size:11px;color:var(--text-muted);">${m.joined_at ? new Date(m.joined_at).toLocaleDateString() : "-"}</td>
+                                <td style="font-size:11px;color:var(--text-muted);">${m.joined_at?new Date(m.joined_at).toLocaleDateString():'-'}</td>
                                 <td><button class="btn btn-danger btn-sm" onclick="Moderation.kick('${m.id}','${esc(m.display_name)}')">踢出</button> <button class="btn btn-danger btn-sm" onclick="Moderation.ban('${m.id}','${esc(m.display_name)}')">封禁</button></td>
                             </tr>`).join("")}</tbody></table>
                         </div>`;
                 }
-            } catch (e) {}
+            } catch(e) {}
         },
         filter() {
-            const q = document.getElementById("mod-search")?.value.toLowerCase() || "";
+            const q = (document.getElementById("mod-search")?.value||"").toLowerCase();
             document.querySelectorAll("#mod-members-tbody tr").forEach(tr => {
-                const n = tr.dataset.name || "", u = tr.dataset.username || "";
-                tr.style.display = n.includes(q) || u.includes(q) ? "" : "none";
+                const n = tr.dataset.name||"", u = tr.dataset.username||"";
+                tr.style.display = n.includes(q)||u.includes(q) ? "" : "none";
             });
         },
         async kick(uid, name) {
-            if (!confirm("确定要踢出 " + name + " 吗？")) return;
-            const gid = document.getElementById("mod-guild-select").value;
+            if (!confirm("确定要踢出 "+name+" 吗？")) return;
+            if (!activeGuild) return;
             try {
-                const d = await (await api(API + "/api/guilds/" + gid + "/kick", {
-                    method: "POST", body: JSON.stringify({ user_id: uid, reason: "面板操作" })
-                })).json();
-                toast(d.success ? "✅ 已踢出" : "❌ " + (d.error || "失败"), d.success ? "success" : "error");
+                const d = await (await api(API+"/api/guilds/"+activeGuild.guild_id+"/kick",{method:"POST",body:JSON.stringify({user_id:uid,reason:"面板操作"})})).json();
+                toast(d.success?"✅ 已踢出":"❌ "+(d.error||"失败"),d.success?"success":"error");
                 if (d.success) this.load();
-            } catch (e) { toast("请求失败", "error"); }
+            } catch(e) { toast("请求失败","error"); }
         },
         async ban(uid, name) {
-            if (!confirm("确定要封禁 " + name + " 吗？")) return;
-            const gid = document.getElementById("mod-guild-select").value;
+            if (!confirm("确定要封禁 "+name+" 吗？")) return;
+            if (!activeGuild) return;
             try {
-                const d = await (await api(API + "/api/guilds/" + gid + "/ban", {
-                    method: "POST", body: JSON.stringify({ user_id: uid, reason: "面板操作", delete_days: 1 })
-                })).json();
-                toast(d.success ? "✅ 已封禁" : "❌ " + (d.error || "失败"), d.success ? "success" : "error");
+                const d = await (await api(API+"/api/guilds/"+activeGuild.guild_id+"/ban",{method:"POST",body:JSON.stringify({user_id:uid,reason:"面板操作",delete_days:1})})).json();
+                toast(d.success?"✅ 已封禁":"❌ "+(d.error||"失败"),d.success?"success":"error");
                 if (d.success) this.load();
-            } catch (e) { toast("请求失败", "error"); }
+            } catch(e) { toast("请求失败","error"); }
         }
     };
 
-    // ====================================================================
     // 拖拽上传
-    // ====================================================================
-    (function () {
-        const area = document.getElementById("file-upload-area");
-        area.addEventListener("dragover", e => { e.preventDefault(); area.classList.add("dragover"); });
-        area.addEventListener("dragleave", () => area.classList.remove("dragover"));
-        area.addEventListener("drop", e => {
-            e.preventDefault();
-            area.classList.remove("dragover");
-            Messenger.handleFiles(e.dataTransfer.files);
-        });
-    })();
+    (function(){const a=document.getElementById("file-upload-area");a.addEventListener("dragover",e=>{e.preventDefault();a.classList.add("dragover");});a.addEventListener("dragleave",()=>a.classList.remove("dragover"));a.addEventListener("drop",e=>{e.preventDefault();a.classList.remove("dragover");Messenger.handleFiles(e.dataTransfer.files);});})();
 
-    // ====================================================================
-    // 启动
-    // ====================================================================
     Auth.init();
     </script>
 </body>
