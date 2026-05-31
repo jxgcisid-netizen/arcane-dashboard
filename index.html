@@ -14,7 +14,6 @@
             --cyan: #00b4d8;
             --cyan-glow: rgba(0,180,216,0.15);
             --pink: #e91e63;
-            --pink-glow: rgba(233,30,99,0.12);
             --gold: #f0a500;
             --text: #e2e8f0;
             --text-secondary: #8895a8;
@@ -42,7 +41,6 @@
                 radial-gradient(ellipse 60% 50% at 80% 80%, rgba(233,30,99,0.04), transparent);
         }
 
-        /* ========== 密码锁屏 ========== */
         .lockscreen {
             position: fixed;
             top: 0; left: 0;
@@ -69,26 +67,14 @@
             text-align: center;
             box-shadow: 0 0 60px rgba(0,180,216,0.08);
         }
-        .lock-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-            animation: float 3s ease-in-out infinite;
-        }
+        .lock-icon { font-size: 48px; margin-bottom: 16px; animation: float 3s ease-in-out infinite; }
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
         }
-        .lock-title {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
+        .lock-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
         .lock-title span { color: var(--cyan); }
-        .lock-subtitle {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 28px;
-        }
+        .lock-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; }
         .lock-input {
             width: 100%;
             padding: 12px 16px;
@@ -106,10 +92,7 @@
             border-color: var(--cyan);
             box-shadow: 0 0 0 3px rgba(0,180,216,0.08);
         }
-        .lock-input::placeholder {
-            color: var(--text-muted);
-            letter-spacing: 1px;
-        }
+        .lock-input::placeholder { color: var(--text-muted); letter-spacing: 1px; }
         .lock-btn {
             width: 100%;
             margin-top: 16px;
@@ -126,17 +109,8 @@
         }
         .lock-btn:hover { background: #00c8ee; }
         .lock-btn:active { transform: scale(0.97); }
-        .lock-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        .lock-error {
-            color: var(--danger);
-            font-size: 12px;
-            margin-top: 12px;
-            min-height: 18px;
-            transition: opacity 0.3s;
-        }
+        .lock-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .lock-error { color: var(--danger); font-size: 12px; margin-top: 12px; min-height: 18px; }
         .lock-remember {
             display: flex;
             align-items: center;
@@ -147,20 +121,7 @@
             color: var(--text-muted);
             cursor: pointer;
         }
-        .lock-remember input { cursor: pointer; }
-        .lock-loading {
-            display: inline-block;
-            width: 16px; height: 16px;
-            border: 2px solid rgba(0,0,0,0.2);
-            border-top-color: #000;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-            vertical-align: middle;
-            margin-right: 6px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ========== 导航栏 ========== */
         .navbar {
             background: var(--surface);
             border-bottom: 1px solid var(--border);
@@ -172,44 +133,23 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(12px);
         }
-        .navbar-brand {
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-        }
+        .navbar-brand { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
         .navbar-brand span {
             background: linear-gradient(135deg, var(--cyan), #0098b0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .navbar-actions {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        .navbar-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-        .status-dot {
-            width: 8px; height: 8px; border-radius: 50%;
-            background: var(--text-muted);
-            transition: background 0.3s;
-        }
+        .navbar-actions { display: flex; align-items: center; gap: 16px; }
+        .navbar-status { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-secondary); }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); }
         .status-dot.online { background: var(--success); animation: pulse 2s infinite; }
         .status-dot.error { background: var(--danger); }
-
         @keyframes pulse {
             0%, 100% { box-shadow: 0 0 0 0 rgba(46,204,113,0.4); }
             50% { box-shadow: 0 0 0 8px rgba(46,204,113,0); }
         }
-
         .btn-icon {
             background: none;
             border: 1px solid var(--border);
@@ -220,25 +160,11 @@
             font-size: 12px;
             transition: all var(--transition);
         }
-        .btn-icon:hover {
-            background: var(--surface-hover);
-            border-color: var(--border-light);
-            color: var(--text);
-        }
-        .btn-icon.danger:hover {
-            border-color: var(--danger);
-            color: var(--danger);
-            background: rgba(231,76,60,0.08);
-        }
+        .btn-icon:hover { background: var(--surface-hover); border-color: var(--border-light); color: var(--text); }
+        .btn-icon.danger:hover { border-color: var(--danger); color: var(--danger); background: rgba(231,76,60,0.08); }
 
-        /* ========== 容器 ========== */
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 32px 32px 64px;
-        }
+        .container { max-width: 1280px; margin: 0 auto; padding: 32px 32px 64px; }
 
-        /* ========== Tab 切换 ========== */
         .tabs {
             display: flex;
             gap: 4px;
@@ -262,21 +188,16 @@
             border: none;
         }
         .tab:hover { color: var(--text-secondary); }
-        .tab.active {
-            background: var(--cyan-glow);
-            color: var(--cyan);
-        }
+        .tab.active { background: var(--cyan-glow); color: var(--cyan); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* ========== 统计卡片 ========== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 20px;
             margin-bottom: 36px;
         }
-
         .stat-card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -291,44 +212,24 @@
             position: absolute;
             top: 0; left: 0;
             width: 4px; height: 100%;
-            border-radius: 0 4px 4px 0;
         }
-        .stat-card:hover {
-            border-color: var(--border-light);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
+        .stat-card:hover { border-color: var(--border-light); transform: translateY(-2px); box-shadow: var(--shadow); }
         .stat-card:nth-child(1)::after { background: var(--cyan); }
         .stat-card:nth-child(2)::after { background: var(--pink); }
         .stat-card:nth-child(3)::after { background: var(--gold); }
         .stat-card:nth-child(4)::after { background: var(--success); }
-
         .stat-label {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 12px;
+            font-size: 11px; font-weight: 600; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;
         }
-        .stat-value {
-            font-size: 38px;
-            font-weight: 700;
-            letter-spacing: -1px;
-        }
+        .stat-value { font-size: 38px; font-weight: 700; letter-spacing: -1px; }
         .stat-card:nth-child(1) .stat-value { color: var(--cyan); }
         .stat-card:nth-child(2) .stat-value { color: var(--pink); }
         .stat-card:nth-child(3) .stat-value { color: var(--gold); }
         .stat-card:nth-child(4) .stat-value { color: var(--success); }
 
-        /* ========== 内容网格 ========== */
-        .content-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
+        .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
         .content-grid.single { grid-template-columns: 1fr; }
-
         .panel {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -355,40 +256,24 @@
             border-radius: 20px;
             font-weight: 600;
         }
-        .panel-body {
-            padding: 16px 24px 24px;
-            max-height: 520px;
-            overflow-y: auto;
-        }
+        .panel-body { padding: 16px 24px 24px; max-height: 520px; overflow-y: auto; }
         .panel-body::-webkit-scrollbar { width: 4px; }
         .panel-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-        /* ========== 表格 ========== */
         table { width: 100%; border-collapse: collapse; }
         th {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            padding: 10px 12px;
-            text-align: left;
+            font-size: 11px; font-weight: 600; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.8px;
+            padding: 10px 12px; text-align: left;
             border-bottom: 2px solid var(--border);
-            position: sticky;
-            top: 0;
-            background: var(--surface);
-            z-index: 1;
+            position: sticky; top: 0; background: var(--surface); z-index: 1;
         }
         td { padding: 12px 12px; font-size: 13px; border-bottom: 1px solid var(--border); }
         tr:last-child td { border-bottom: none; }
         tbody tr { cursor: pointer; transition: background 0.15s; }
         tbody tr:hover td { background: rgba(255,255,255,0.03); }
         tbody tr.active td { background: rgba(0,180,216,0.06); }
-        .guild-id {
-            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
+        .guild-id { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; font-size: 12px; color: var(--text-secondary); }
         .guild-name { font-weight: 500; }
         .level-tag {
             display: inline-block;
@@ -412,18 +297,11 @@
         .rank-1 { background: rgba(240,165,0,0.2); color: var(--gold); }
         .rank-2 { background: rgba(192,192,192,0.15); color: #c0c0c0; }
         .rank-3 { background: rgba(205,127,50,0.15); color: #cd7f32; }
-        .rank-other { color: var(--text-muted); font-weight: 500; text-align: center; }
+        .rank-other { color: var(--text-muted); }
 
-        /* ========== 工具栏 ========== */
-        .toolbar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
+        .toolbar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
         .toolbar input, .toolbar select {
-            flex: 1;
-            min-width: 150px;
+            flex: 1; min-width: 150px;
             background: var(--bg);
             border: 1px solid var(--border);
             color: var(--text);
@@ -434,10 +312,7 @@
             outline: none;
             transition: border-color var(--transition);
         }
-        .toolbar input:focus, .toolbar select:focus {
-            border-color: var(--cyan);
-            box-shadow: 0 0 0 3px rgba(0,180,216,0.08);
-        }
+        .toolbar input:focus, .toolbar select:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(0,180,216,0.08); }
         .toolbar input::placeholder { color: var(--text-muted); }
         .toolbar select option { background: var(--surface); color: var(--text); }
 
@@ -456,82 +331,31 @@
         }
         .btn:hover { background: #00c8ee; }
         .btn:active { transform: scale(0.97); }
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-        }
-        .btn-outline:hover {
-            background: var(--surface-hover);
-            border-color: var(--border-light);
-            color: var(--text);
-        }
-        .btn-danger {
-            background: var(--danger);
-            color: #fff;
-        }
-        .btn-danger:hover { background: #f05050; }
-        .btn-success {
-            background: var(--success);
-            color: #fff;
-        }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
+        .btn-outline:hover { background: var(--surface-hover); border-color: var(--border-light); color: var(--text); }
+        .btn-success { background: var(--success); color: #fff; }
         .btn-success:hover { background: #3ddb84; }
 
-        /* ========== 消息发送区域 ========== */
-        .message-preview {
-            margin-top: 16px;
-            padding: 16px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            display: none;
-        }
-        .message-preview.show { display: block; }
-        .preview-embed {
-            background: #1a1c20;
-            border-left: 4px solid var(--cyan);
-            border-radius: 6px;
-            padding: 12px 16px;
-            margin-top: 12px;
-        }
-        .preview-embed-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
-        .preview-embed-desc { font-size: 13px; color: var(--text-secondary); }
-        .preview-embed-footer { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
-        .embed-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 12px;
-        }
-        .embed-options input {
+        textarea {
+            width: 100%;
+            min-height: 80px;
             background: var(--bg);
             border: 1px solid var(--border);
             color: var(--text);
-            padding: 8px 12px;
-            border-radius: var(--radius-xs);
-            font-size: 12px;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-family: inherit;
+            resize: vertical;
             outline: none;
-            width: 100%;
         }
-        .embed-options input:focus { border-color: var(--cyan); }
-        .embed-options label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-            display: block;
-        }
-        .toggle-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 12px;
-        }
-        .toggle {
-            position: relative;
-            width: 40px; height: 22px;
-        }
+        textarea:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(0,180,216,0.08); }
+        .char-count { text-align: right; font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+        .char-count.warn { color: var(--warning); }
+        .char-count.danger { color: var(--danger); }
+
+        .toggle-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+        .toggle { position: relative; width: 40px; height: 22px; }
         .toggle input { display: none; }
         .toggle-slider {
             position: absolute;
@@ -551,75 +375,55 @@
             transition: var(--transition);
         }
         .toggle input:checked + .toggle-slider { background: var(--cyan); }
-        .toggle input:checked + .toggle-slider:before {
-            transform: translateX(18px);
-            background: #fff;
-        }
+        .toggle input:checked + .toggle-slider:before { transform: translateX(18px); background: #fff; }
 
-        textarea {
-            width: 100%;
-            min-height: 80px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 12px;
-            border-radius: var(--radius-sm);
-            font-size: 13px;
-            font-family: inherit;
-            resize: vertical;
-            outline: none;
-            transition: border-color var(--transition);
+        .embed-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .embed-options input {
+            background: var(--bg); border: 1px solid var(--border); color: var(--text);
+            padding: 8px 12px; border-radius: var(--radius-xs); font-size: 12px; outline: none; width: 100%;
         }
-        textarea:focus {
-            border-color: var(--cyan);
-            box-shadow: 0 0 0 3px rgba(0,180,216,0.08);
-        }
-        .char-count {
-            text-align: right;
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-        .char-count.warn { color: var(--warning); }
-        .char-count.danger { color: var(--danger); }
+        .embed-options label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block; }
 
-        /* ========== 设置面板 ========== */
+        .message-preview {
+            margin-top: 16px; padding: 16px; background: var(--bg);
+            border: 1px solid var(--border); border-radius: var(--radius-sm); display: none;
+        }
+        .message-preview.show { display: block; }
+        .preview-embed {
+            background: #1a1c20; border-left: 4px solid var(--cyan); border-radius: 6px;
+            padding: 12px 16px; margin-top: 12px;
+        }
+        .preview-embed-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+        .preview-embed-desc { font-size: 13px; color: var(--text-secondary); }
+        .preview-embed-footer { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
+
         .settings-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 0;
-            border-bottom: 1px solid var(--border);
-            gap: 16px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 0; border-bottom: 1px solid var(--border); gap: 16px;
         }
         .settings-row:last-child { border-bottom: none; }
         .settings-label { font-size: 13px; font-weight: 500; }
         .settings-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
         .settings-input {
-            width: 90px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 8px 10px;
-            border-radius: var(--radius-xs);
-            font-size: 13px;
-            text-align: center;
-            outline: none;
-            font-family: 'SF Mono', 'Fira Code', monospace;
-            flex-shrink: 0;
+            width: 90px; background: var(--bg); border: 1px solid var(--border); color: var(--text);
+            padding: 8px 10px; border-radius: var(--radius-xs); font-size: 13px; text-align: center;
+            outline: none; font-family: 'SF Mono', 'Fira Code', monospace; flex-shrink: 0;
         }
         .settings-input:focus { border-color: var(--cyan); }
 
-        /* ========== 空状态 ========== */
-        .empty-state {
-            text-align: center;
-            padding: 48px 20px;
-            color: var(--text-muted);
-            font-size: 14px;
+        .guild-preview {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px;
         }
+        .guild-preview-item {
+            background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 12px 16px; text-align: center;
+        }
+        .guild-preview-item .value { font-size: 22px; font-weight: 700; color: var(--cyan); }
+        .guild-preview-item .label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; letter-spacing: 0.8px; }
+
+        .empty-state { text-align: center; padding: 48px 20px; color: var(--text-muted); font-size: 14px; }
         .empty-state .icon { font-size: 36px; margin-bottom: 12px; opacity: 0.5; }
 
-        /* ========== 加载动画 ========== */
         .spinner {
             width: 24px; height: 24px;
             border: 2px solid var(--border);
@@ -628,59 +432,18 @@
             animation: spin 0.8s linear infinite;
             margin: 20px auto;
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ========== Toast ========== */
-        .toast-container {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 999;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
         .toast {
-            padding: 12px 20px;
-            border-radius: var(--radius-sm);
-            font-size: 13px;
-            font-weight: 500;
-            animation: slideUp 0.3s ease;
-            box-shadow: var(--shadow);
-            max-width: 380px;
+            padding: 12px 20px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500;
+            animation: slideUp 0.3s ease; box-shadow: var(--shadow); max-width: 380px;
         }
         .toast.success { background: #1a3a2a; color: var(--success); border: 1px solid rgba(46,204,113,0.3); }
         .toast.error { background: #3a1a1a; color: var(--danger); border: 1px solid rgba(231,76,60,0.3); }
         .toast.info { background: #1a2a3a; color: var(--cyan); border: 1px solid rgba(0,180,216,0.3); }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ========== 服务器信息卡片 ========== */
-        .guild-preview {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .guild-preview-item {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 12px 16px;
-            text-align: center;
-        }
-        .guild-preview-item .value {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--cyan);
-        }
-        .guild-preview-item .label {
-            font-size: 10px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin-top: 4px;
-            letter-spacing: 0.8px;
-        }
-
-        /* ========== 响应式 ========== */
         @media (max-width: 900px) {
             .content-grid { grid-template-columns: 1fr; }
             .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -701,13 +464,7 @@
             <div class="lock-icon">🔐</div>
             <div class="lock-title">FBX<span>Bot</span> 控制面板</div>
             <div class="lock-subtitle">请输入访问密码</div>
-            <input type="password"
-                   class="lock-input"
-                   id="password-input"
-                   placeholder="••••••"
-                   autocomplete="current-password"
-                   maxlength="64"
-                   onkeydown="if(event.key==='Enter')unlock()">
+            <input type="password" class="lock-input" id="password-input" placeholder="••••••" autocomplete="current-password" maxlength="64" onkeydown="if(event.key==='Enter')unlock()">
             <button class="lock-btn" id="lock-btn" onclick="unlock()">🔓 解锁</button>
             <label class="lock-remember">
                 <input type="checkbox" id="remember-checkbox" checked>
@@ -729,9 +486,7 @@
         </div>
     </nav>
 
-    <!-- ==================== 主内容 ==================== -->
     <div class="container" id="main-content">
-        <!-- Tab 切换 -->
         <div class="tabs">
             <button class="tab active" onclick="switchTab('dashboard')">📊 仪表盘</button>
             <button class="tab" onclick="switchTab('messenger')">💬 消息发送</button>
@@ -758,32 +513,20 @@
                     <div class="stat-value" style="font-size:18px;" id="bot-status">在线</div>
                 </div>
             </div>
-
             <div class="content-grid">
                 <div class="panel">
-                    <div class="panel-header">
-                        服务器列表
-                        <span class="badge" id="guild-count">0</span>
-                    </div>
-                    <div class="panel-body" id="guilds-panel">
-                        <div class="spinner"></div>
-                    </div>
+                    <div class="panel-header">服务器列表<span class="badge" id="guild-count">0</span></div>
+                    <div class="panel-body" id="guilds-panel"><div class="spinner"></div></div>
                 </div>
                 <div class="panel">
-                    <div class="panel-header">
-                        排行榜
-                        <span class="badge" id="lb-count" style="display:none;">0</span>
-                    </div>
+                    <div class="panel-header">排行榜<span class="badge" id="lb-count" style="display:none;">0</span></div>
                     <div class="panel-body">
                         <div class="toolbar">
                             <input type="text" id="guild-id-input" placeholder="输入服务器 ID（点击左侧自动填入）">
                             <button class="btn" onclick="loadLeaderboard()">🔍 查询</button>
                         </div>
                         <div id="lb-content">
-                            <div class="empty-state">
-                                <div class="icon">📋</div>
-                                点击左侧服务器或输入 ID 查看排行榜
-                            </div>
+                            <div class="empty-state"><div class="icon">📋</div>点击左侧服务器或输入 ID 查看排行榜</div>
                         </div>
                     </div>
                 </div>
@@ -794,34 +537,17 @@
         <div class="tab-content" id="tab-messenger">
             <div class="content-grid single">
                 <div class="panel full-width">
-                    <div class="panel-header">
-                        💬 通过 Bot 发送消息
-                        <span class="badge" id="msg-guild-hint">请先选择服务器</span>
-                    </div>
+                    <div class="panel-header">💬 通过 Bot 发送消息<span class="badge" id="msg-guild-hint">请先选择服务器</span></div>
                     <div class="panel-body">
-                        <!-- 服务器选择 -->
                         <div class="toolbar">
-                            <select id="msg-guild-select" onchange="onMsgGuildChange()">
-                                <option value="">-- 选择服务器 --</option>
-                            </select>
-                            <select id="msg-channel-select" onchange="onChannelChange()">
-                                <option value="">-- 先选服务器，再选频道 --</option>
-                            </select>
+                            <select id="msg-guild-select" onchange="onMsgGuildChange()"><option value="">-- 选择服务器 --</option></select>
+                            <select id="msg-channel-select" onchange="onChannelChange()"><option value="">-- 先选服务器，再选频道 --</option></select>
                         </div>
-
-                        <!-- 服务器预览 -->
                         <div class="guild-preview" id="guild-preview" style="display:none;"></div>
-
-                        <!-- 消息内容 -->
                         <div style="margin-top:12px;">
-                            <textarea id="message-content"
-                                      placeholder="输入要发送的消息内容..."
-                                      maxlength="2000"
-                                      oninput="updateCharCount()"></textarea>
+                            <textarea id="message-content" placeholder="输入要发送的消息内容..." maxlength="2000" oninput="updateCharCount()"></textarea>
                             <div class="char-count" id="char-count">0 / 2000</div>
                         </div>
-
-                        <!-- Embed 开关 -->
                         <div class="toggle-row">
                             <label class="toggle">
                                 <input type="checkbox" id="embed-enabled" onchange="toggleEmbed()">
@@ -829,42 +555,17 @@
                             </label>
                             <span style="font-size:12px;color:var(--text-secondary);">附加 Embed 消息</span>
                         </div>
-
-                        <!-- Embed 选项 -->
                         <div class="embed-options" id="embed-options" style="display:none;">
-                            <div>
-                                <label>标题</label>
-                                <input type="text" id="embed-title" placeholder="Embed 标题" maxlength="256">
-                            </div>
-                            <div>
-                                <label>颜色</label>
-                                <input type="text" id="embed-color" placeholder="#00b4d8" value="#00b4d8" maxlength="7">
-                            </div>
-                            <div style="grid-column: 1 / -1;">
-                                <label>描述</label>
-                                <input type="text" id="embed-description" placeholder="Embed 描述内容" maxlength="4096">
-                            </div>
-                            <div>
-                                <label>页脚</label>
-                                <input type="text" id="embed-footer" placeholder="页脚文字" maxlength="2048">
-                            </div>
-                            <div>
-                                <label>缩略图 URL</label>
-                                <input type="text" id="embed-thumbnail" placeholder="https://...">
-                            </div>
+                            <div><label>标题</label><input type="text" id="embed-title" placeholder="Embed 标题" maxlength="256"></div>
+                            <div><label>颜色</label><input type="text" id="embed-color" placeholder="#00b4d8" value="#00b4d8" maxlength="7"></div>
+                            <div style="grid-column:1/-1;"><label>描述</label><input type="text" id="embed-description" placeholder="Embed 描述内容" maxlength="4096"></div>
+                            <div><label>页脚</label><input type="text" id="embed-footer" placeholder="页脚文字" maxlength="2048"></div>
+                            <div><label>缩略图 URL</label><input type="text" id="embed-thumbnail" placeholder="https://..."></div>
                         </div>
-
-                        <!-- 发送按钮 -->
                         <div style="display:flex;gap:10px;margin-top:16px;">
-                            <button class="btn btn-success" onclick="sendMessage()" id="send-btn">
-                                📨 发送消息
-                            </button>
-                            <button class="btn btn-outline" onclick="previewMessage()">
-                                👁 预览
-                            </button>
+                            <button class="btn btn-success" onclick="sendMessage()" id="send-btn">📨 发送消息</button>
+                            <button class="btn btn-outline" onclick="previewMessage()">👁 预览</button>
                         </div>
-
-                        <!-- 预览区 -->
                         <div class="message-preview" id="message-preview">
                             <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">预览效果</div>
                             <div id="preview-content" style="color:var(--text);font-size:13px;white-space:pre-wrap;"></div>
@@ -883,22 +584,15 @@
         <div class="tab-content" id="tab-settings">
             <div class="content-grid single">
                 <div class="panel full-width">
-                    <div class="panel-header">
-                        ⚙️ 服务器设置
-                        <span class="badge" id="settings-guild-hint">请先选择服务器</span>
-                    </div>
+                    <div class="panel-header">⚙️ 服务器设置<span class="badge" id="settings-guild-hint">请先选择服务器</span></div>
                     <div class="panel-body" id="settings-panel">
-                        <div class="empty-state">
-                            <div class="icon">🔒</div>
-                            在仪表盘中选择一个服务器来编辑设置
-                        </div>
+                        <div class="empty-state"><div class="icon">🔒</div>在仪表盘中选择一个服务器来编辑设置</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Toast 容器 -->
     <div class="toast-container" id="toast-container"></div>
 
     <script>
@@ -911,34 +605,46 @@
         let guildsData = [];
         let availableChannels = [];
 
+        // ==================== API 请求封装（自动带 token） ====================
+        function getToken() {
+            return localStorage.getItem(STORAGE_KEY);
+        }
+
+        async function apiFetch(url, options = {}) {
+            const token = getToken();
+            const headers = { ...(options.headers || {}) };
+            if (token) {
+                headers["Authorization"] = "Bearer " + token;
+            }
+            if (options.body && typeof options.body === "string" && !headers["Content-Type"]) {
+                headers["Content-Type"] = "application/json";
+            }
+            return fetch(url, { ...options, headers });
+        }
+
         // ==================== 密码验证 ====================
         async function initAuth() {
-            // 检查是否"记住我"
             const remember = localStorage.getItem(REMEMBER_KEY);
             const storedToken = localStorage.getItem(STORAGE_KEY);
 
             if (remember === "true" && storedToken) {
-                // 用存储的 token 验证是否仍然有效
                 const valid = await verifyToken(storedToken);
                 if (valid) {
-                    // Token 有效，直接跳过锁屏
                     document.getElementById("lockscreen").classList.add("hidden");
                     initApp();
                     return;
                 } else {
-                    // Token 过期，清除存储
                     localStorage.removeItem(STORAGE_KEY);
                 }
             }
 
-            // 显示锁屏
             document.getElementById("lockscreen").classList.remove("hidden");
             document.getElementById("password-input").focus();
         }
 
         async function verifyToken(token) {
             try {
-                const resp = await apifetch(API + "/api/verify-token", {
+                const resp = await apiFetch(API + "/api/verify-token", {
                     headers: { "Authorization": "Bearer " + token }
                 });
                 const data = await resp.json();
@@ -959,13 +665,12 @@
                 return;
             }
 
-            // 显示加载状态
             btn.disabled = true;
-            btn.innerHTML = '<span class="lock-loading"></span>验证中...';
+            btn.textContent = "验证中...";
             errorEl.textContent = "";
 
             try {
-                const resp = await apifetch(API + "/api/auth", {
+                const resp = await fetch(API + "/api/auth", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ password: password })
@@ -973,13 +678,9 @@
                 const data = await resp.json();
 
                 if (data.success) {
-                    // 验证成功
                     document.getElementById("lockscreen").classList.add("hidden");
-
-                    // 存储 token
                     localStorage.setItem(STORAGE_KEY, data.token);
                     localStorage.setItem(REMEMBER_KEY, remember ? "true" : "false");
-
                     initApp();
                 } else {
                     errorEl.textContent = data.error || "密码错误";
@@ -990,12 +691,11 @@
                 errorEl.textContent = "连接失败，请检查网络";
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = "🔓 解锁";
+                btn.textContent = "🔓 解锁";
             }
         }
 
         function lockScreen() {
-            // 如果不记住，清除 token
             if (localStorage.getItem(REMEMBER_KEY) !== "true") {
                 localStorage.removeItem(STORAGE_KEY);
             }
@@ -1007,9 +707,8 @@
 
         // ==================== 初始化 ====================
         async function initApp() {
-            // 设置状态
             try {
-                const resp = await apifetch(API + "/api/health");
+                const resp = await apiFetch(API + "/api/health");
                 const data = await resp.json();
                 if (data.success) {
                     setStatus("online", "已连接");
@@ -1041,17 +740,10 @@
         function switchTab(tabName) {
             document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
             document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-
             document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add("active");
             document.getElementById("tab-" + tabName).classList.add("active");
-
-            // 切换到消息发送时填充服务器列表
-            if (tabName === "messenger") {
-                populateMsgGuildSelect();
-            }
-            if (tabName === "settings" && currentGuildId) {
-                loadSettings();
-            }
+            if (tabName === "messenger") populateMsgGuildSelect();
+            if (tabName === "settings" && currentGuildId) loadSettings();
         }
 
         // ==================== 加载数据 ====================
@@ -1061,52 +753,35 @@
 
         async function loadStats() {
             try {
-                const resp = await apifetch(API + "/api/stats");
+                const resp = await apiFetch(API + "/api/stats");
                 const data = await resp.json();
                 if (data.success) {
                     animateValue("total-users", data.data.total_users);
                     animateValue("total-guilds", data.data.total_guilds);
                     animateValue("max-level", data.data.max_level);
                 }
-            } catch (e) {
-                console.error("加载统计失败:", e);
-            }
+            } catch (e) { console.error("加载统计失败:", e); }
         }
 
         async function loadGuilds() {
             const panel = document.getElementById("guilds-panel");
             panel.innerHTML = '<div class="spinner"></div>';
-
             try {
-                const resp = await apifetch(API + "/api/guilds");
+                const resp = await apiFetch(API + "/api/guilds");
                 const data = await resp.json();
                 if (data.success && data.data.length) {
                     guildsData = data.data;
                     document.getElementById("guild-count").textContent = data.data.length;
-
-                    panel.innerHTML = `
-                        <table>
-                            <thead><tr><th>服务器</th><th>用户数</th><th>最高等级</th></tr></thead>
-                            <tbody>
-                                ${data.data.map(g => `
-                                    <tr onclick="selectGuild('${g.guild_id}', this)"
-                                        class="${currentGuildId === g.guild_id ? 'active' : ''}">
-                                        <td>
-                                            <div class="guild-name">${escapeHtml(g.guild_name || '未知服务器')}</div>
-                                            <div class="guild-id">${g.guild_id}</div>
-                                        </td>
-                                        <td>${g.user_count.toLocaleString()}</td>
-                                        <td><span class="level-tag">Lv ${g.max_level}</span></td>
-                                    </tr>
-                                `).join("")}
-                            </tbody>
-                        </table>
-                    `;
+                    panel.innerHTML = `<table><thead><tr><th>服务器</th><th>用户数</th><th>最高等级</th></tr></thead><tbody>
+                        ${data.data.map(g => `<tr onclick="selectGuild('${g.guild_id}', this)" class="${currentGuildId === g.guild_id ? 'active' : ''}">
+                            <td><div class="guild-name">${escapeHtml(g.guild_name || '未知服务器')}</div><div class="guild-id">${g.guild_id}</div></td>
+                            <td>${g.user_count.toLocaleString()}</td>
+                            <td><span class="level-tag">Lv ${g.max_level}</span></td>
+                        </tr>`).join("")}</tbody></table>`;
                 } else {
                     panel.innerHTML = '<div class="empty-state"><div class="icon">📭</div>暂无服务器数据</div>';
                 }
             } catch (e) {
-                console.error("加载服务器列表失败:", e);
                 panel.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div>加载失败</div>';
             }
         }
@@ -1115,182 +790,115 @@
         function selectGuild(guildId, rowElement) {
             currentGuildId = guildId;
             document.getElementById("guild-id-input").value = guildId;
-
-            // 高亮行
             document.querySelectorAll("#guilds-panel tbody tr").forEach(r => r.classList.remove("active"));
             if (rowElement) rowElement.classList.add("active");
-
             loadLeaderboard();
             loadSettings();
-
-            // 同时更新消息发送页面的选择
             document.getElementById("msg-guild-select").value = guildId;
             onMsgGuildChange();
         }
 
         async function loadLeaderboard() {
             const guildId = document.getElementById("guild-id-input").value.trim();
-            if (!guildId) {
-                showToast("请输入服务器 ID", "error");
-                return;
-            }
-
+            if (!guildId) { showToast("请输入服务器 ID", "error"); return; }
             currentGuildId = guildId;
             const lbContent = document.getElementById("lb-content");
             lbContent.innerHTML = '<div class="spinner"></div>';
-
             try {
-                const resp = await apifetch(API + "/api/leaderboard/" + guildId);
+                const resp = await apiFetch(API + "/api/leaderboard/" + guildId);
                 const data = await resp.json();
-
                 if (data.success && data.data.length) {
                     document.getElementById("lb-count").style.display = "inline";
                     document.getElementById("lb-count").textContent = data.data.length;
-
-                    const rankIcons = {1: '🥇', 2: '🥈', 3: '🥉'};
-                    lbContent.innerHTML = `
-                        <table>
-                            <thead><tr><th>#</th><th>用户</th><th>等级</th><th>XP</th><th>语音XP</th></tr></thead>
-                            <tbody>
-                                ${data.data.map(row => {
-                                    const icon = rankIcons[row.rank] || '';
-                                    const rankClass = row.rank <= 3 ? `rank-${row.rank}` : 'rank-other';
-                                    return `
-                                        <tr>
-                                            <td>
-                                                <span class="rank-badge ${rankClass}">
-                                                    ${icon || row.rank}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="guild-name">${escapeHtml(row.user_name || '未知用户')}</span>
-                                                <div class="guild-id">${row.user_id}</div>
-                                            </td>
-                                            <td><span class="level-tag">Lv ${row.level}</span></td>
-                                            <td>${row.xp.toLocaleString()}</td>
-                                            <td style="color:var(--text-muted)">${row.voice_xp.toLocaleString()}</td>
-                                        </tr>
-                                    `;
-                                }).join("")}
-                            </tbody>
-                        </table>
-                    `;
+                    const rankIcons = {1:'🥇',2:'🥈',3:'🥉'};
+                    lbContent.innerHTML = `<table><thead><tr><th>#</th><th>用户</th><th>等级</th><th>XP</th><th>语音XP</th></tr></thead><tbody>
+                        ${data.data.map(row => {
+                            const icon = rankIcons[row.rank] || '';
+                            const rc = row.rank <= 3 ? `rank-${row.rank}` : 'rank-other';
+                            return `<tr><td><span class="rank-badge ${rc}">${icon || row.rank}</span></td>
+                                <td><span class="guild-name">${escapeHtml(row.user_name || '未知用户')}</span><div class="guild-id">${row.user_id}</div></td>
+                                <td><span class="level-tag">Lv ${row.level}</span></td>
+                                <td>${row.xp.toLocaleString()}</td>
+                                <td style="color:var(--text-muted)">${row.voice_xp.toLocaleString()}</td></tr>`;
+                        }).join("")}</tbody></table>`;
                 } else {
                     lbContent.innerHTML = '<div class="empty-state"><div class="icon">🔍</div>该服务器暂无数据</div>';
                     document.getElementById("lb-count").style.display = "none";
                 }
-            } catch (e) {
-                console.error("加载排行榜失败:", e);
-                lbContent.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div>加载失败</div>';
-            }
+            } catch (e) { lbContent.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div>加载失败</div>'; }
         }
 
         // ==================== 消息发送 ====================
         function populateMsgGuildSelect() {
             const select = document.getElementById("msg-guild-select");
-            const currentValue = select.value;
+            const cv = select.value;
             select.innerHTML = '<option value="">-- 选择服务器 --</option>';
-
             if (guildsData.length === 0) {
-                // 如果还没加载，先加载
-                apifetch(API + "/api/guilds").then(r => r.json()).then(d => {
-                    if (d.success) {
-                        guildsData = d.data;
-                        populateMsgGuildSelect();
-                    }
+                apiFetch(API + "/api/guilds").then(r => r.json()).then(d => {
+                    if (d.success) { guildsData = d.data; populateMsgGuildSelect(); }
                 });
                 return;
             }
-
             guildsData.forEach(g => {
-                const option = document.createElement("option");
-                option.value = g.guild_id;
-                option.textContent = `${g.guild_name || '未知服务器'} (${g.guild_id})`;
-                select.appendChild(option);
+                const o = document.createElement("option");
+                o.value = g.guild_id;
+                o.textContent = `${g.guild_name || '未知服务器'} (${g.guild_id})`;
+                select.appendChild(o);
             });
-
-            if (currentValue) select.value = currentValue;
+            if (cv) select.value = cv;
         }
 
         async function onMsgGuildChange() {
             const guildId = document.getElementById("msg-guild-select").value;
-            const channelSelect = document.getElementById("msg-channel-select");
+            const cs = document.getElementById("msg-channel-select");
             const preview = document.getElementById("guild-preview");
-
             if (!guildId) {
-                channelSelect.innerHTML = '<option value="">-- 先选服务器，再选频道 --</option>';
+                cs.innerHTML = '<option value="">-- 先选服务器，再选频道 --</option>';
                 preview.style.display = "none";
                 document.getElementById("msg-guild-hint").textContent = "请先选择服务器";
                 return;
             }
-
             currentGuildId = guildId;
             document.getElementById("msg-guild-hint").textContent = guildId;
-            channelSelect.innerHTML = '<option value="">加载频道中...</option>';
-
-            // 加载服务器预览
+            cs.innerHTML = '<option value="">加载频道中...</option>';
             loadGuildPreview(guildId);
-
-            // 加载频道列表
             try {
-                const resp = await apifetch(API + "/api/guilds/" + guildId + "/channels");
+                const resp = await apiFetch(API + "/api/guilds/" + guildId + "/channels");
                 const data = await resp.json();
                 if (data.success) {
                     availableChannels = data.data;
-                    channelSelect.innerHTML = '<option value="">-- 选择频道 --</option>';
+                    cs.innerHTML = '<option value="">-- 选择频道 --</option>';
                     data.data.forEach(ch => {
-                        const option = document.createElement("option");
-                        option.value = ch.id;
-                        const category = ch.category ? `[${ch.category}] ` : "";
-                        option.textContent = `${category}#${ch.name}`;
-                        channelSelect.appendChild(option);
+                        const o = document.createElement("option");
+                        o.value = ch.id;
+                        o.textContent = (ch.category ? `[${ch.category}] ` : "") + "#" + ch.name;
+                        cs.appendChild(o);
                     });
-                } else {
-                    channelSelect.innerHTML = '<option value="">获取失败</option>';
-                }
-            } catch (e) {
-                channelSelect.innerHTML = '<option value="">获取失败</option>';
-            }
+                } else { cs.innerHTML = '<option value="">获取失败</option>'; }
+            } catch (e) { cs.innerHTML = '<option value="">获取失败</option>'; }
         }
 
         async function loadGuildPreview(guildId) {
             try {
-                const resp = await apifetch(API + "/api/guilds/" + guildId + "/preview");
+                const resp = await apiFetch(API + "/api/guilds/" + guildId + "/preview");
                 const data = await resp.json();
                 if (data.success) {
                     const g = data.data;
                     const preview = document.getElementById("guild-preview");
                     preview.style.display = "grid";
-                    preview.innerHTML = `
-                        <div class="guild-preview-item">
-                            <div class="value">${g.member_count}</div>
-                            <div class="label">成员</div>
-                        </div>
-                        <div class="guild-preview-item">
-                            <div class="value">${g.online_count}</div>
-                            <div class="label">在线</div>
-                        </div>
-                        <div class="guild-preview-item">
-                            <div class="value">${g.text_channels}</div>
-                            <div class="label">文字频道</div>
-                        </div>
-                        <div class="guild-preview-item">
-                            <div class="value">${g.voice_channels}</div>
-                            <div class="label">语音频道</div>
-                        </div>
-                    `;
+                    preview.innerHTML = `<div class="guild-preview-item"><div class="value">${g.member_count}</div><div class="label">成员</div></div>
+                        <div class="guild-preview-item"><div class="value">${g.online_count}</div><div class="label">在线</div></div>
+                        <div class="guild-preview-item"><div class="value">${g.text_channels}</div><div class="label">文字频道</div></div>
+                        <div class="guild-preview-item"><div class="value">${g.voice_channels}</div><div class="label">语音频道</div></div>`;
                 }
-            } catch (e) {
-                console.error("加载服务器预览失败:", e);
-            }
+            } catch (e) {}
         }
 
         function onChannelChange() {
-            const channelId = document.getElementById("msg-channel-select").value;
-            const hint = document.getElementById("msg-guild-hint");
-            if (channelId) {
-                const ch = availableChannels.find(c => c.id === channelId);
-                hint.textContent = ch ? `#${ch.name}` : channelId;
+            const chId = document.getElementById("msg-channel-select").value;
+            if (chId) {
+                const ch = availableChannels.find(c => c.id === chId);
+                document.getElementById("msg-guild-hint").textContent = ch ? "#" + ch.name : chId;
             }
         }
 
@@ -1298,63 +906,42 @@
             const len = document.getElementById("message-content").value.length;
             const el = document.getElementById("char-count");
             el.textContent = `${len} / 2000`;
-            el.className = "char-count";
-            if (len > 1800) el.classList.add("warn");
-            if (len > 1950) el.classList.add("danger");
+            el.className = "char-count" + (len > 1800 ? " warn" : "") + (len > 1950 ? " danger" : "");
         }
 
         function toggleEmbed() {
-            const enabled = document.getElementById("embed-enabled").checked;
-            document.getElementById("embed-options").style.display = enabled ? "grid" : "none";
+            document.getElementById("embed-options").style.display = document.getElementById("embed-enabled").checked ? "grid" : "none";
         }
 
         function previewMessage() {
             const content = document.getElementById("message-content").value;
-            const previewDiv = document.getElementById("message-preview");
-            const previewContent = document.getElementById("preview-content");
-            const previewEmbed = document.getElementById("preview-embed");
-
-            previewDiv.classList.add("show");
-            previewContent.textContent = content || "(空消息)";
-
-            const embedEnabled = document.getElementById("embed-enabled").checked;
-            if (embedEnabled) {
-                previewEmbed.style.display = "block";
-                const color = document.getElementById("embed-color").value || "#00b4d8";
-                previewEmbed.style.borderLeftColor = color;
-                document.getElementById("preview-embed-title").textContent =
-                    document.getElementById("embed-title").value || "(无标题)";
-                document.getElementById("preview-embed-desc").textContent =
-                    document.getElementById("embed-description").value || "(无描述)";
-                document.getElementById("preview-embed-footer").textContent =
-                    document.getElementById("embed-footer").value || "";
-            } else {
-                previewEmbed.style.display = "none";
-            }
+            const pd = document.getElementById("message-preview");
+            pd.classList.add("show");
+            document.getElementById("preview-content").textContent = content || "(空消息)";
+            const embedOn = document.getElementById("embed-enabled").checked;
+            const pe = document.getElementById("preview-embed");
+            if (embedOn) {
+                pe.style.display = "block";
+                pe.style.borderLeftColor = document.getElementById("embed-color").value || "#00b4d8";
+                document.getElementById("preview-embed-title").textContent = document.getElementById("embed-title").value || "(无标题)";
+                document.getElementById("preview-embed-desc").textContent = document.getElementById("embed-description").value || "(无描述)";
+                document.getElementById("preview-embed-footer").textContent = document.getElementById("embed-footer").value || "";
+            } else { pe.style.display = "none"; }
         }
 
         async function sendMessage() {
             const channelId = document.getElementById("msg-channel-select").value;
             const content = document.getElementById("message-content").value.trim();
-
-            if (!channelId) {
-                showToast("请先选择频道", "error");
-                return;
-            }
-            if (!content) {
-                showToast("请输入消息内容", "error");
-                return;
-            }
-
-            const sendBtn = document.getElementById("send-btn");
-            sendBtn.disabled = true;
-            sendBtn.textContent = "发送中...";
-
-            const embedEnabled = document.getElementById("embed-enabled").checked;
+            if (!channelId) { showToast("请先选择频道", "error"); return; }
+            if (!content) { showToast("请输入消息内容", "error"); return; }
+            const btn = document.getElementById("send-btn");
+            btn.disabled = true;
+            btn.textContent = "发送中...";
+            const embedOn = document.getElementById("embed-enabled").checked;
             const body = {
                 channel_id: channelId,
                 content: content,
-                embed: embedEnabled ? {
+                embed: embedOn ? {
                     enabled: true,
                     title: document.getElementById("embed-title").value,
                     description: document.getElementById("embed-description").value,
@@ -1363,135 +950,67 @@
                     thumbnail_url: document.getElementById("embed-thumbnail").value
                 } : { enabled: false }
             };
-
             try {
-                const resp = await apifetch(API + "/api/send-message", {
+                const resp = await apiFetch(API + "/api/send-message", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(body)
                 });
                 const data = await resp.json();
-
                 if (data.success) {
-                    showToast(`✅ 消息已发送到 #${data.data.channel_name}`, "success");
-                    // 清空输入
+                    showToast("✅ 消息已发送到 #" + data.data.channel_name, "success");
                     document.getElementById("message-content").value = "";
                     updateCharCount();
                     document.getElementById("message-preview").classList.remove("show");
-                } else {
-                    showToast("❌ " + (data.error || "发送失败"), "error");
-                }
-            } catch (e) {
-                showToast("❌ 发送失败，请检查连接", "error");
-            } finally {
-                sendBtn.disabled = false;
-                sendBtn.textContent = "📨 发送消息";
-            }
+                } else { showToast("❌ " + (data.error || "发送失败"), "error"); }
+            } catch (e) { showToast("❌ 发送失败，请检查连接", "error"); }
+            finally { btn.disabled = false; btn.textContent = "📨 发送消息"; }
         }
 
         // ==================== 设置 ====================
         async function loadSettings() {
             if (!currentGuildId) return;
-
             const panel = document.getElementById("settings-panel");
-            const hint = document.getElementById("settings-guild-hint");
-            hint.textContent = currentGuildId;
-
+            document.getElementById("settings-guild-hint").textContent = currentGuildId;
             const guild = guildsData.find(g => g.guild_id === currentGuildId);
             const guildName = guild?.guild_name || currentGuildId;
-
             try {
-                const resp = await apifetch(API + "/api/settings/" + currentGuildId);
+                const resp = await apiFetch(API + "/api/settings/" + currentGuildId);
                 const data = await resp.json();
-
                 if (data.success) {
-                    panel.innerHTML = `
-                        <div style="margin-bottom:16px;font-size:13px;color:var(--text-secondary);">
-                            正在编辑: <strong style="color:var(--text);">${escapeHtml(guildName)}</strong>
-                        </div>
-                        <div class="settings-row">
-                            <div>
-                                <div class="settings-label">经验倍率</div>
-                                <div class="settings-desc">消息获得的 XP 倍率 (0.1 - 10.0)</div>
-                            </div>
-                            <div style="display:flex;align-items:center;gap:8px;">
-                                <input type="number"
-                                       class="settings-input"
-                                       id="setting-xp-rate"
-                                       value="${data.data.xp_rate || 1.0}"
-                                       min="0.1" max="10.0" step="0.1">
-                                <span style="font-size:12px;color:var(--text-muted);">×</span>
-                            </div>
-                        </div>
-                        <div class="settings-row">
-                            <div>
-                                <div class="settings-label">语音经验倍率</div>
-                                <div class="settings-desc">语音获得的 XP 倍率 (0.1 - 10.0)</div>
-                            </div>
-                            <div style="display:flex;align-items:center;gap:8px;">
-                                <input type="number"
-                                       class="settings-input"
-                                       id="setting-voice-xp-rate"
-                                       value="${data.data.voice_xp_rate || 1.0}"
-                                       min="0.1" max="10.0" step="0.1">
-                                <span style="font-size:12px;color:var(--text-muted);">×</span>
-                            </div>
-                        </div>
-                        <button class="btn" onclick="saveSettings()" style="margin-top:16px;width:100%;">
-                            💾 保存设置
-                        </button>
-                    `;
+                    panel.innerHTML = `<div style="margin-bottom:16px;font-size:13px;color:var(--text-secondary);">正在编辑: <strong style="color:var(--text);">${escapeHtml(guildName)}</strong></div>
+                        <div class="settings-row"><div><div class="settings-label">经验倍率</div><div class="settings-desc">消息获得的 XP 倍率 (0.1 - 10.0)</div></div>
+                            <div style="display:flex;align-items:center;gap:8px;"><input type="number" class="settings-input" id="setting-xp-rate" value="${data.data.xp_rate || 1.0}" min="0.1" max="10.0" step="0.1"><span style="font-size:12px;color:var(--text-muted);">×</span></div></div>
+                        <div class="settings-row"><div><div class="settings-label">语音经验倍率</div><div class="settings-desc">语音获得的 XP 倍率 (0.1 - 10.0)</div></div>
+                            <div style="display:flex;align-items:center;gap:8px;"><input type="number" class="settings-input" id="setting-voice-xp-rate" value="${data.data.voice_xp_rate || 1.0}" min="0.1" max="10.0" step="0.1"><span style="font-size:12px;color:var(--text-muted);">×</span></div></div>
+                        <button class="btn" onclick="saveSettings()" style="margin-top:16px;width:100%;">💾 保存设置</button>`;
                 }
-            } catch (e) {
-                console.error("加载设置失败:", e);
-                panel.innerHTML = '<div class="empty-state">加载设置失败</div>';
-            }
+            } catch (e) { panel.innerHTML = '<div class="empty-state">加载设置失败</div>'; }
         }
 
         async function saveSettings() {
             if (!currentGuildId) return;
-
             const xpRate = document.getElementById("setting-xp-rate")?.value;
             const voiceXpRate = document.getElementById("setting-voice-xp-rate")?.value;
-
             try {
-                const resp = await apifetch(API + "/api/settings/" + currentGuildId, {
+                const resp = await apiFetch(API + "/api/settings/" + currentGuildId, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        xp_rate: parseFloat(xpRate),
-                        voice_xp_rate: parseFloat(voiceXpRate)
-                    })
+                    body: JSON.stringify({ xp_rate: parseFloat(xpRate), voice_xp_rate: parseFloat(voiceXpRate) })
                 });
                 const data = await resp.json();
-                if (data.success) {
-                    showToast("设置已保存 ✓", "success");
-                } else {
-                    showToast("保存失败: " + data.error, "error");
-                }
-            } catch (e) {
-                showToast("保存失败，请检查连接", "error");
-            }
+                showToast(data.success ? "设置已保存 ✓" : "保存失败: " + data.error, data.success ? "success" : "error");
+            } catch (e) { showToast("保存失败，请检查连接", "error"); }
         }
 
         // ==================== 工具函数 ====================
         function animateValue(elementId, target) {
             const el = document.getElementById(elementId);
             const current = parseInt(el.textContent.replace(/,/g, '')) || 0;
-            if (current === target) {
-                el.textContent = target.toLocaleString();
-                return;
-            }
-            const duration = 600;
-            const start = performance.now();
-
+            if (current === target) { el.textContent = target.toLocaleString(); return; }
+            const duration = 600, start = performance.now();
             function update(now) {
-                const elapsed = now - start;
-                const progress = Math.min(elapsed / duration, 1);
-                const eased = 1 - Math.pow(1 - progress, 3);
-                const value = Math.round(current + (target - current) * eased);
-                el.textContent = value.toLocaleString();
-                if (progress < 1) requestAnimationFrame(update);
+                const p = Math.min((now - start) / duration, 1);
+                el.textContent = Math.round(current + (target - current) * (1 - Math.pow(1 - p, 3))).toLocaleString();
+                if (p < 1) requestAnimationFrame(update);
             }
             requestAnimationFrame(update);
         }
@@ -1509,11 +1028,7 @@
             toast.className = "toast " + type;
             toast.textContent = message;
             container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = "0";
-                toast.style.transition = "opacity 0.3s";
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            setTimeout(() => { toast.style.opacity = "0"; toast.style.transition = "opacity 0.3s"; setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
         // ==================== 启动 ====================
