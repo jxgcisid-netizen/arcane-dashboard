@@ -938,7 +938,7 @@
 
         async function verifyToken(token) {
             try {
-                const resp = await fetch(API + "/api/verify-token", {
+                const resp = await apifetch(API + "/api/verify-token", {
                     headers: { "Authorization": "Bearer " + token }
                 });
                 const data = await resp.json();
@@ -965,7 +965,7 @@
             errorEl.textContent = "";
 
             try {
-                const resp = await fetch(API + "/api/auth", {
+                const resp = await apifetch(API + "/api/auth", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ password: password })
@@ -1009,7 +1009,7 @@
         async function initApp() {
             // 设置状态
             try {
-                const resp = await fetch(API + "/api/health");
+                const resp = await apifetch(API + "/api/health");
                 const data = await resp.json();
                 if (data.success) {
                     setStatus("online", "已连接");
@@ -1061,7 +1061,7 @@
 
         async function loadStats() {
             try {
-                const resp = await fetch(API + "/api/stats");
+                const resp = await apifetch(API + "/api/stats");
                 const data = await resp.json();
                 if (data.success) {
                     animateValue("total-users", data.data.total_users);
@@ -1078,7 +1078,7 @@
             panel.innerHTML = '<div class="spinner"></div>';
 
             try {
-                const resp = await fetch(API + "/api/guilds");
+                const resp = await apifetch(API + "/api/guilds");
                 const data = await resp.json();
                 if (data.success && data.data.length) {
                     guildsData = data.data;
@@ -1140,7 +1140,7 @@
             lbContent.innerHTML = '<div class="spinner"></div>';
 
             try {
-                const resp = await fetch(API + "/api/leaderboard/" + guildId);
+                const resp = await apifetch(API + "/api/leaderboard/" + guildId);
                 const data = await resp.json();
 
                 if (data.success && data.data.length) {
@@ -1193,7 +1193,7 @@
 
             if (guildsData.length === 0) {
                 // 如果还没加载，先加载
-                fetch(API + "/api/guilds").then(r => r.json()).then(d => {
+                apifetch(API + "/api/guilds").then(r => r.json()).then(d => {
                     if (d.success) {
                         guildsData = d.data;
                         populateMsgGuildSelect();
@@ -1233,7 +1233,7 @@
 
             // 加载频道列表
             try {
-                const resp = await fetch(API + "/api/guilds/" + guildId + "/channels");
+                const resp = await apifetch(API + "/api/guilds/" + guildId + "/channels");
                 const data = await resp.json();
                 if (data.success) {
                     availableChannels = data.data;
@@ -1255,7 +1255,7 @@
 
         async function loadGuildPreview(guildId) {
             try {
-                const resp = await fetch(API + "/api/guilds/" + guildId + "/preview");
+                const resp = await apifetch(API + "/api/guilds/" + guildId + "/preview");
                 const data = await resp.json();
                 if (data.success) {
                     const g = data.data;
@@ -1365,7 +1365,7 @@
             };
 
             try {
-                const resp = await fetch(API + "/api/send-message", {
+                const resp = await apifetch(API + "/api/send-message", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(body)
@@ -1401,7 +1401,7 @@
             const guildName = guild?.guild_name || currentGuildId;
 
             try {
-                const resp = await fetch(API + "/api/settings/" + currentGuildId);
+                const resp = await apifetch(API + "/api/settings/" + currentGuildId);
                 const data = await resp.json();
 
                 if (data.success) {
@@ -1455,7 +1455,7 @@
             const voiceXpRate = document.getElementById("setting-voice-xp-rate")?.value;
 
             try {
-                const resp = await fetch(API + "/api/settings/" + currentGuildId, {
+                const resp = await apifetch(API + "/api/settings/" + currentGuildId, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
