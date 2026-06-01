@@ -8,9 +8,7 @@
 </head>
 <body>
 
-    <!-- ================================================================ -->
-    <!-- 锁屏                                                              -->
-    <!-- ================================================================ -->
+    <!-- 锁屏 -->
     <div class="lockscreen" id="lockscreen">
         <div class="lock-box">
             <div class="lock-icon">🔐</div>
@@ -28,9 +26,7 @@
         </div>
     </div>
 
-    <!-- ================================================================ -->
-    <!-- 选择服务器弹窗（登录后弹出）                                         -->
-    <!-- ================================================================ -->
+    <!-- 选择服务器弹窗 -->
     <div class="lockscreen" id="guild-picker" style="display:none;">
         <div class="lock-box" style="padding:36px 32px;text-align:left;">
             <div style="font-size:18px;font-weight:700;margin-bottom:6px;">🌐 选择服务器</div>
@@ -39,9 +35,7 @@
         </div>
     </div>
 
-    <!-- ================================================================ -->
-    <!-- 导航栏                                                            -->
-    <!-- ================================================================ -->
+    <!-- 导航栏 -->
     <nav class="navbar">
         <div class="navbar-brand">FBX<span>Bot</span></div>
         <div class="navbar-actions">
@@ -49,7 +43,6 @@
                 <div class="status-dot" id="dot"></div>
                 <span id="status-text">连接中...</span>
             </div>
-            <!-- 服务器切换器（右上角） -->
             <select id="global-guild-select" onchange="onGlobalGuildChange()"
                 style="background:var(--surface);border:1px solid var(--border);color:var(--cyan);padding:5px 10px;border-radius:var(--radius-xs);font-size:12px;max-width:200px;font-weight:600;">
                 <option value="">加载中...</option>
@@ -59,9 +52,7 @@
         </div>
     </nav>
 
-    <!-- ================================================================ -->
-    <!-- 主内容                                                            -->
-    <!-- ================================================================ -->
+    <!-- 主内容 -->
     <div class="container" id="main-content">
         <div class="tabs">
             <button class="tab active" onclick="UI.switchTab('dashboard')">📊 仪表盘</button>
@@ -69,7 +60,7 @@
             <button class="tab" onclick="UI.switchTab('settings')">⚙️ 设置</button>
         </div>
 
-        <!-- ==================== 仪表盘 ==================== -->
+        <!-- 仪表盘 -->
         <div class="tab-content active" id="tab-dashboard">
             <div class="stats-grid">
                 <div class="stat-card"><div class="stat-label">📊 总用户</div><div class="stat-value" id="total-users">--</div></div>
@@ -91,7 +82,7 @@
             </div>
         </div>
 
-        <!-- ==================== 消息发送 ==================== -->
+        <!-- 消息发送 -->
         <div class="tab-content" id="tab-messenger">
             <div class="content-grid single">
                 <div class="panel full">
@@ -116,8 +107,7 @@
 
                         <div class="file-upload-area" id="file-upload-area">
                             <div onclick="document.getElementById('file-input').click()" style="cursor:pointer;">
-                                📎 点击上传文件/图片（或拖拽到此处）
-                                <br><span style="font-size:10px;">最大 8MB</span>
+                                📎 点击上传文件/图片（或拖拽到此处）<br><span style="font-size:10px;">最大 8MB</span>
                             </div>
                             <input type="file" id="file-input" multiple style="display:none;"
                                    onchange="Messenger.handleFiles(this.files)"
@@ -158,24 +148,21 @@
             </div>
         </div>
 
-        <!-- ==================== 设置 ==================== -->
+        <!-- 设置 -->
         <div class="tab-content" id="tab-settings">
             <div class="content-grid single">
-
                 <div class="panel full">
                     <div class="panel-header">⚙️ 服务器设置</div>
                     <div class="panel-body" id="settings-panel">
                         <div class="empty-state"><div class="icon">🔒</div>选择服务器后自动加载</div>
                     </div>
                 </div>
-
                 <div class="panel full">
                     <div class="panel-header">🛡️ 成员管理</div>
                     <div class="panel-body" id="mod-panel">
                         <div class="empty-state"><div class="icon">🛡️</div>选择服务器后自动加载</div>
                     </div>
                 </div>
-
                 <div class="panel full">
                     <div class="panel-header">⚠️ 危险区域</div>
                     <div class="panel-body">
@@ -201,13 +188,15 @@ const SKEY = "fbxbot_auth_token";
 const RKEY = "fbxbot_remember";
 
 let guildList = [];
-let activeGuild = null;  // 全局选中的服务器
+let activeGuild = null;
 let botOnline = true;
 
 async function api(url, opts = {}) {
     const t = localStorage.getItem(SKEY);
     const h = { ...(opts.headers || {}) };
     if (t) h["Authorization"] = "Bearer " + t;
+    if (opts.body && typeof opts.body === "string" && !h["Content-Type"])
+        h["Content-Type"] = "application/json";
     return fetch(url, { ...opts, headers: h });
 }
 
@@ -361,7 +350,6 @@ const UI = {
         document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
         document.querySelector(`.tab[onclick="UI.switchTab('${name}')"]`).classList.add("active");
         document.getElementById("tab-" + name).classList.add("active");
-        // 切过去时刷新
         if (!activeGuild) return;
         if (name === "dashboard") Dashboard.load();
         if (name === "messenger") Messenger.onGuildReady();
@@ -388,9 +376,7 @@ function showGuildPicker() {
 function selectGlobalGuild(gid) {
     activeGuild = guildList.find(g => g.guild_id === gid);
     document.getElementById("guild-picker").style.display = "none";
-    // 更新右上角下拉框
     document.getElementById("global-guild-select").value = gid;
-    // 刷新所有面板
     refreshAllPanels();
     toast("✅ " + (activeGuild?.guild_name || gid), "success");
 }
@@ -430,7 +416,6 @@ const App = {
         try { const d = await (await api(API+"/api/health")).json(); botOnline = d.success && d.bot_connected; } catch(e) { botOnline=false; }
         BotControl.updateUI();
         await this.loadAll();
-        // 加载完后弹出选服务器
         if (guildList.length > 0) showGuildPicker();
     },
     async loadAll() { await Promise.all([this.loadStats(), this.loadGuilds()]); },
@@ -564,20 +549,26 @@ const Messenger = {
         if (!content && !this.files.length) { toast("请输入内容或上传文件", "error"); return; }
         const btn = document.getElementById("send-btn"); btn.disabled = true; btn.textContent = "发送中...";
         try {
-            const resp = await api(API+"/api/send-message", {
+            const token = localStorage.getItem(SKEY);
+            const body = JSON.stringify({
+                channel_id: cid,
+                content: content,
+                embed: document.getElementById("embed-enabled").checked ? {
+                    enabled: true,
+                    title: document.getElementById("embed-title").value,
+                    description: document.getElementById("embed-description").value,
+                    color: document.getElementById("embed-color").value,
+                    footer: document.getElementById("embed-footer").value,
+                    thumbnail_url: document.getElementById("embed-thumbnail").value
+                } : { enabled: false }
+            });
+            const resp = await fetch(API+"/api/send-message", {
                 method: "POST",
-                body: JSON.stringify({
-                    channel_id: cid,
-                    content: content,
-                    embed: document.getElementById("embed-enabled").checked ? {
-                        enabled: true,
-                        title: document.getElementById("embed-title").value,
-                        description: document.getElementById("embed-description").value,
-                        color: document.getElementById("embed-color").value,
-                        footer: document.getElementById("embed-footer").value,
-                        thumbnail_url: document.getElementById("embed-thumbnail").value
-                    } : { enabled: false }
-                })
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+                body: body
             });
             const d = await resp.json();
             if (d.success) {
